@@ -125,7 +125,7 @@ def get_channel(channelid):
         apichannels.append(apichannels[0])
         apichannels.remove(apichannels[0])
         raise APItimeoutError("APIがチャンネルを返しませんでした")
-    return [[{"title":i["title"],"id":i["videoId"],"authorId":t["authorId"],"author":t["author"],"published":i["publishedText"],"type":"video"} for i in t["latestVideos"]],{"channelname":t["author"],"channelicon":t["authorThumbnails"][-1]["url"],"channelprofile":t["descriptionHtml"]}]
+    return [[{"title":i["title"],"id":i["videoId"],"authorId":t["authorId"],"author":t["author"],"viewCountText":i["viewCountText"],"published":i["publishedText"],"type":"video"} for i in t["latestVideos"]],{"channelname":t["author"],"channelicon":t["authorThumbnails"][-1]["url"],"channelprofile":t["descriptionHtml"]}]
 
 def get_playlist(listid,page):
     t = json.loads(apirequest(r"/api/v1/playlists/"+ urllib.parse.quote(listid)+"?page="+urllib.parse.quote(page)))["videos"]
