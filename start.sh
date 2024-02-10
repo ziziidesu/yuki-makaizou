@@ -1,2 +1,2 @@
 pip install -r requirements.txt
-python main.py
+uvicorn --port $PORT --host 0.0.0.0 main:app
