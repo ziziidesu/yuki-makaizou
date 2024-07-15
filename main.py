@@ -266,9 +266,28 @@ def write_bbs(request: Request,name: str = "",message: str = "",seed:Union[str,N
     if not(check_cokie(yuki)):
         return redirect("/")
     t = requests.get(fr"{url}bbs/result?name={urllib.parse.quote(name)}&message={urllib.parse.quote(message)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}&info={urllib.parse.quote(get_info(request))}",cookies={"yuki":"True"}, allow_redirects=False)
-    if t.status_code != 307:
-        return HTMLResponse(t.text)
-    return redirect(f"/bbs?name={urllib.parse.quote(name)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}")
+  
+@app.get("/api/w/{id}")
+def get_video_stream(id: str, response: Response):
+    try:
+        # Fetch video data using your existing get_data function
+        video_data = get_data(id)
+        
+        # Extract the video stream URLs
+        video_urls = video_data[1]
+        
+        # Return the first video stream URL
+        stream_url = video_urls[0] if video_urls else None
+        
+        if stream_url:
+            return {"stream_url": stream_url}
+        else:
+            return {"error": "Video stream URL not found."}, 404
+    
+    except Exception as e:
+        response.status_code = 500
+        return {"error": f"Failed to fetch video stream URL: {str(e)}"}
+
 
 @cache(seconds=30)
 def how_cached():
