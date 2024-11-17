@@ -187,7 +187,7 @@ def get_data(videoid):
     ], list(reversed([i["url"] for i in t["formatStreams"]]))[:2], t["descriptionHtml"].replace("\n", "<br>"), t["title"], t["authorId"], t["author"], t["authorThumbnails"][-1]["url"]
     
 def getting_data(videoid):
-    url = f"https://watawatawata.glitch.me/api/{urllib.parse.quote(videoid)}"
+    url = f"https://ludicrous-wonderful-temple.glitch.me/api/login/{urllib.parse.quote(videoid)}"
     response = requests.get(url)
     if response.status_code == 200:
         t = response.json()
@@ -296,7 +296,7 @@ def video(v: str, request: Request):
 
 @app.get('/video2', response_class=HTMLResponse)
 async def video2(request: Request):
-    return template('watch.html', {
+    return template('watchwa.html', {
         "request": request,
         "videoid": "Kapy4ZGlhpU",
         "videourls": "https://cdn.glitch.global/afdfa13f-436f-464b-84a1-e2f59bc4e2fa/videoplayback%205.mp4",
@@ -313,16 +313,18 @@ def video(v: str, request: Request):
     videoid = v
     t = getting_data(videoid)
     print(t)
+    print(t[1])
     return template('watch.html', {
         "request": request,
         "videoid": videoid,
-        "videourls": t[1],
         "res": t[0],
+        "videourls": t[1],
         "description": t[2],
         "videotitle": t[3],
         "authorid": t[4],
         "authoricon": t[6],
         "author": t[5],
+        "streamUrl": t[1],
     })
 
 @app.get("/search", response_class=HTMLResponse)
