@@ -242,16 +242,6 @@ def channel(channelid: str, request: Request):
         "channelprofile": t[1]["channelprofile"]
     })
 
-@app.get("/answer", response_class=HTMLResponse)
-def set_cokie(q: str):
-    if len(q) > 10:
-        return "ランダム"
-    return "文章"
-  
-@app.get("/snowball", response_class=HTMLResponse)
-def home(request: Request):
-    return template("snowball.html", {"request": request})
-
 @app.get("/playlist", response_class=HTMLResponse)
 def playlist(list: str, request: Request, page: Union[int, None] = 1):
     return template("search.html", {
@@ -279,6 +269,9 @@ def home():
     global url
     url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
     
+@app.get("/snowball", response_class=HTMLResponse)
+async def snowball(request: Request):
+    return templates.TemplateResponse("snowball.html", {"request": request})
     
 @app.exception_handler(500)
 def page(request: Request, __):
