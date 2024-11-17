@@ -39,9 +39,7 @@
         <input type="checkbox" id="loopCheck">
         <span class="checkmark"></span>
         </label></li>
-        {% for videourl in videourls%}
-        <li><a href="{{ videourl }}" target="_blank">ストリームURLに移動</a></li>
-        {% endfor %}
+        <li><a href="{{ videourls[0] }}" target="_blank">ストリームURLに移動</a></li>
         <li><a href="https://github.com/sadaramagura" target="_blank">GitHub</a></li>
     </ul>
 </nav>
@@ -51,9 +49,7 @@
         <img src="https://cdn.glitch.global/3128bf45-3a23-4695-81ba-3aba21b8585b/IMG_1966.gif?v=1729824394361" alt="Loading..." />
     </div>
   <video id="wakameVideo" controls autoplay poster="{% if proxy == 'True' %}/thumbnail?v={{ videoid }}{% else %}https://img.youtube.com/vi/{{ videoid }}/0.jpg{% endif %}">
-    {% for videourl in videourls%}
-    <source src="{{ videourl }}" type="video/mp4">
-    {% endfor %}
+    <source src="{{ videourls[0] }}" type="video/mp4">
     読み込み失敗。ブラウザをアップデートしてどうぞ。
   </video>
 </div>
@@ -84,47 +80,6 @@
     </div>
   </div>
     <br>
-<div class="tube-box">
-  <div class="iframe-container">
-<div class="results">
-  {% for re in res %}
-    {% if re['type'] == 'video' %}
-      <div class="result-item">
-        <a href="/w/{{ re['id'] }}">
-          <img loading="lazy" src="{% if proxy == 'True' %}
-                    /thumbnail?v={{ re['id'] }}
-                  {% else %}
-                    https://img.youtube.com/vi/{{ re['id'] }}/mqdefault.jpg
-                  {% endif %}" alt="{{ re['title'] }}">
-        </a>
-        <p class="channel-name"><a href="/c/{{ re['authorId'] }}">{{ re['author'] }}</a></p>
-        <p class="video-title">{{ re['title'] }}</p>
-        <p class="video-description">{{ re['description'] }}</p>
-        <p class="video-meta">{{ re['uploadedAt'] }} - {{ re['duration'] }}</p>
-      </div>
-    {% elif re['type'] == 'playlist' %}
-      <div class="playresult-item">
-        <a href="/p/{{ re['playlistId'] }}">
-          <img style="opacity: 0.5" src="{{ re['firstVideo']['bestThumbnail']['url'][19:] }}" alt="{{ re['title'] }}">
-        </a>
-        <p class="video-title">プレイリスト ({{ re['length'] }} 本以上の動画)</p>
-        <p class="channel-name"><a href="/u/{{ re['owner']['id'] }}">{{ re['owner']['name'] }}</a></p>
-      </div>
-    {% elif re['type'] == 'channel' %}
-      <div class="result-item">
-        <a href="/c/{{ re['id'] }}">
-          <img src="https://wakamecomment.glitch.me/ytc/{{ re['id'] }}" alt="{{ re['name'] }}">
-        </a>
-        <p class="video-title">{{ re['name'] }}</p>
-        <p class="video-description">{{ re['description'] or re['descriptionShort'] }}</p>
-        <p class="video-meta">{{ re['subscribers'] }} subscribers</p>
-      </div>
-    {% endif %}
-  {% endfor %}
-</div>
-
-  </div>
-</div>
    <style>
 	* {
 		--plyr-color-main: #ff8181;

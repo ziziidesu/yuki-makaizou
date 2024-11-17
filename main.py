@@ -11,7 +11,7 @@ max_api_wait_time = 4
 max_time = 10
 version = "1.0"
 
-apis = [
+videoapis = [
   r"https://invidious.qwik.space",   
   r"https://yt.drgnz.club",   
   r"https://invidious.privacyredirect.com",   
@@ -32,6 +32,38 @@ apis = [
   r"https://invidious.perennialte.ch"
 ];
 
+apis = [
+    r"https://iv.datura.network/",
+    r"https://invidious.private.coffee/",
+    r"https://invidious.protokolla.fi/",
+    r"https://invidious.perennialte.ch/",
+    r"https://yt.cdaut.de/",
+    r"https://invidious.materialio.us/",
+    r"https://yewtu.be/",
+    r"https://invidious.fdn.fr/",
+    r"https://invidious.qwik.space/",
+    r"https://invidious.privacyredirect.com/",
+    r"https://invidious.drgns.space/",
+    r"https://vid.puffyan.us",
+    r"https://invidious.jing.rocks/",
+    r"https://invidious.nerdvpn.de/",
+    r"https://vid.puffyan.us/",
+    r"https://inv.riverside.rocks/",
+    r"https://invidio.xamh.de/",
+    r"https://y.com.sb/",
+    r"https://invidious.sethforprivacy.com/",
+    r"https://invidious.tiekoetter.com/",
+    r"https://inv.bp.projectsegfau.lt/",
+    r"https://inv.vern.cc/",
+    r"https://iteroni.com/",
+    r"https://inv.privacy.com.de/",
+    r"https://invidious.rhyshl.live/",
+    r"https://inv.nadeko.net/",
+    r"https://invidious.weblibre.org/",
+    r"https://invidious.namazso.eu/",
+    r"https://invidious.jing.rocks",
+]
+
 apichannels = []
 apicomments = []
 [[apichannels.append(i),apicomments.append(i)] for i in apis]
@@ -49,6 +81,32 @@ def is_json(json_str):
 
 def apirequest(url, headers=None):
     global apis
+    global max_time
+    starttime = time.time()
+
+    if headers is None:
+        headers = {}
+
+    for api in apis:
+        if time.time() - starttime >= max_time - 1:
+            break
+        try:
+            res = requests.get(api + url, headers=headers, timeout=10)
+
+            if res.status_code == 200 and is_json(res.text):
+                return res.text
+            else:
+                print(f"エラー:{api}")
+                apis.append(api)
+                apis.remove(api)
+        except Exception as e:
+            print(f"タイムアウト:{api}, エラー: {e}")
+            apis.append(api)
+            apis.remove(api)
+    raise APItimeoutError("APIがタイムアウトしました")
+    
+def videoapirequest(url, headers=None):
+    global videoapis
     global max_time
     starttime = time.time()
 
@@ -126,7 +184,7 @@ def get_data(videoid):
     headers = {
         "Cache-Control": "no-cache"
     }
-    response = apirequest(r"api/v1/videos/" + urllib.parse.quote(videoid), headers=headers)
+    response = videoapirequest(r"api/v1/videos/" + urllib.parse.quote(videoid), headers=headers)
     t = json.loads(response)
     return [
         {"id": i["videoId"], "title": i["title"], "authorId": i["authorId"], 
