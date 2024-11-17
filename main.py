@@ -8,13 +8,14 @@ import os
 from cache import cache
 
 
-max_api_wait_time = 3
+max_api_wait_time = 5
 max_time = 10
 version = "1.0"
 
 apis = [
     r"https://iv.datura.network/",
     r"https://invidious.private.coffee/",
+    r"https://inv.nadeko.net/",
     r"https://invidious.protokolla.fi/",
     r"https://invidious.perennialte.ch/",
     r"https://yt.cdaut.de/",
@@ -38,7 +39,6 @@ apis = [
     r"https://iteroni.com/",
     r"https://inv.privacy.com.de/",
     r"https://invidious.rhyshl.live/",
-    r"https://inv.nadeko.net/",
     r"https://invidious.weblibre.org/",
     r"https://invidious.namazso.eu/",
     r"https://invidious.jing.rocks",
@@ -227,6 +227,22 @@ def home(request: Request):
 def video(v: str, request: Request):
     videoid = v
     t = get_data(videoid)
+    return template('video.html', {
+        "request": request,
+        "videoid": videoid,
+        "videourls": t[1],
+        "res": t[0],
+        "description": t[2],
+        "videotitle": t[3],
+        "authorid": t[4],
+        "authoricon": t[6],
+        "author": t[5],
+    })
+
+@app.get('/video', response_class=HTMLResponse)
+def video(v: str, request: Request):
+    videoid = v
+    t = getting_data(videoid)
     return template('video.html', {
         "request": request,
         "videoid": videoid,

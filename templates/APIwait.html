@@ -2,20 +2,42 @@
 <html>
 <head>
     <title>QRコードを作成！</title>
+    <style>
+      button {
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        color: #fff;
+        background-color: #ff5f7e;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+      }
+  </style>
 </head>
 <body>
     処理中です<br>ちょっと待ってね<br>
   
-    <a href="/video?v="></a>
+    <button id="redirectButton">別の処理方法を試す</button>
     <script>setTimeout(function(){location.reload();},1000);</script>
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const vValue = urlParams.get('v');
-    if (vValue === null) {
-      document.getElementById('vValue').textContent = 'vパラメータはURLに存在しません';
-    } else {
-      document.getElementById('vValue').textContent = 'vの値: ' + vValue;
-    }
-  </script>
+<script>
+  
+    document.getElementById('redirectButton').addEventListener('click', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const vValue = urlParams.get('v');
+      if (vValue !== null) {
+        window.location.href = '/video?v=' + vValue;
+      } else {
+        alert('？');
+      }
+    });
+</script>
 </body>
 </html>
