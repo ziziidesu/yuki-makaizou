@@ -79,28 +79,23 @@ def is_json(json_str):
         pass
     return result
 
-def apirequest(url, headers=None):
+def apirequest(url):
     global apis
     global max_time
     starttime = time.time()
-
-    if headers is None:
-        headers = {}
-
     for api in apis:
-        if time.time() - starttime >= max_time - 1:
+        if  time.time() - starttime >= max_time -1:
             break
         try:
-            res = requests.get(api + url, headers=headers, timeout=10)
-
+            res = requests.get(api+url,timeout=max_api_wait_time)
             if res.status_code == 200 and is_json(res.text):
                 return res.text
             else:
                 print(f"エラー:{api}")
                 apis.append(api)
                 apis.remove(api)
-        except Exception as e:
-            print(f"タイムアウト:{api}, エラー: {e}")
+        except:
+            print(f"タイムアウト:{api}")
             apis.append(api)
             apis.remove(api)
     raise APItimeoutError("APIがタイムアウトしました")
@@ -211,8 +206,6 @@ def getting_data(videoid):
         author = t["channelName"]
         author_icon = t["channelImage"] 
         return recommended_videos, stream_url, description, title, authorId, author, author_icon
-    else:
-        return None, None, None, None, None, None, None
   
 def get_search(q,page):
     global logs
