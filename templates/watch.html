@@ -40,6 +40,7 @@
         <span class="checkmark"></span>
         </label></li>
         <li><a href="{{ videourls }}" target="_blank">ストリームURLに移動</a></li>
+        <li><a href="https://github.com/sadaramagura" target="_blank">GitHub</a></li>
     </ul>
 </nav>
 <div id="overlay" class="overlay"></div>
@@ -81,26 +82,43 @@
     <br>
 <div class="tube-box">
   <div class="iframe-container">
-    <div class="pure-u-1 pure-u-lg-1-5">
-      {% for re in res %}
-      <a href="/watch?v={{ re['id'] }}">
-        <div class="thumbnail">
-          <img 
-            loading="lazy" 
-            class="thumbnail" 
-            src="{% if proxy == 'True' %}
+<div class="results">
+  {% for re in res %}
+    {% if re['type'] == 'video' %}
+      <div class="result-item">
+        <a href="/w/{{ re['id'] }}">
+          <img loading="lazy" src="{% if proxy == 'True' %}
                     /thumbnail?v={{ re['id'] }}
                   {% else %}
-                    https://img.youtube.com/vi/{{ re['id'] }}/0.jpg
-                  {% endif %}" 
-            alt="{{ re['title'] }}" />
-        </div>
-        <p class="video-data">{{ re["title"] }}</p>
-      </a>
-      <br />
-      <a href="/channel/{{ re['authorId'] }}">{{ re["author"] }}</a>
-      <b class="flex-right" style="text-align: end">{{ re["viewCountText"] }}</b>{% endfor %}
-    </div>
+                    https://img.youtube.com/vi/{{ re['id'] }}/mqdefault.jpg
+                  {% endif %}" alt="{{ re['title'] }}">
+        </a>
+        <p class="channel-name"><a href="/c/{{ re['authorId'] }}">{{ re['author'] }}</a></p>
+        <p class="video-title">{{ re['title'] }}</p>
+        <p class="video-description">{{ re['description'] }}</p>
+        <p class="video-meta">{{ re['uploadedAt'] }} - {{ re['duration'] }}</p>
+      </div>
+    {% elif re['type'] == 'playlist' %}
+      <div class="playresult-item">
+        <a href="/p/{{ re['playlistId'] }}">
+          <img style="opacity: 0.5" src="{{ re['firstVideo']['bestThumbnail']['url'][19:] }}" alt="{{ re['title'] }}">
+        </a>
+        <p class="video-title">プレイリスト ({{ re['length'] }} 本以上の動画)</p>
+        <p class="channel-name"><a href="/u/{{ re['owner']['id'] }}">{{ re['owner']['name'] }}</a></p>
+      </div>
+    {% elif re['type'] == 'channel' %}
+      <div class="result-item">
+        <a href="/c/{{ re['id'] }}">
+          <img src="https://wakamecomment.glitch.me/ytc/{{ re['id'] }}" alt="{{ re['name'] }}">
+        </a>
+        <p class="video-title">{{ re['name'] }}</p>
+        <p class="video-description">{{ re['description'] or re['descriptionShort'] }}</p>
+        <p class="video-meta">{{ re['subscribers'] }} subscribers</p>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
   </div>
 </div>
    <style>
@@ -278,5 +296,54 @@ $('#searchbox').autocomplete({
             }
             xhr.send();
         }},delay:300});
+document.onkeydown = keydown;
+function keydown(key) {
+  var v = document.getElementById("wakameVideo");
+  if (key.keyCode == 32 || key.keyCode == 75) {
+    if (v.paused == true) {
+      v.play(); 
+    } else {
+      v.pause(); 
+    }
+  }
+}
+  
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "/comments?v=" + getUrlQueries().v); // コメント取得リクエスト
+xhr.onload = function () {
+  if (xhr.status === 200) {
+    try {
+      // サーバーからのレスポンスがJSON形式だと仮定
+      var comments = JSON.parse(xhr.responseText); // JSONを解析
+
+      // コメントをHTMLとして生成
+      var commentsHtml = "";
+      comments.forEach(function(comment) {
+        commentsHtml += `
+          <div class="comment">
+            <p class="comment-author"><strong>${comment.author}</strong></p>
+            <p class="comment-text">${comment.text}</p>
+            <p class="comment-date">${comment.date}</p>
+          </div>
+        `;
+      });
+
+      // コメントを表示する
+      document.getElementById("comments").innerHTML = commentsHtml;
+
+    } catch (error) {
+      console.error("コメントの表示に失敗しました:", error);
+      document.getElementById("comments").innerHTML =
+        "コメントの取得中にエラーが発生しました。再読み込みを試してください";
+    }
+  } else {
+    // サーバー側のエラーの場合
+    document.getElementById("comments").innerHTML =
+      "エラーが発生しました。再読み込みを試してください";
+  }
+};
+xhr.send();
+
+
 </script>
 </html>
