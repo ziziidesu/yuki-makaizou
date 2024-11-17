@@ -146,11 +146,6 @@ def check_cokie(cookie):
     return True
 
 
-
-
-
-
-
 from fastapi import FastAPI, Depends
 from fastapi import Response,Cookie,Request
 from fastapi.responses import HTMLResponse,PlainTextResponse
@@ -170,126 +165,124 @@ from fastapi.templating import Jinja2Templates
 template = Jinja2Templates(directory='templates').TemplateResponse
 
 
-
-
-
 @app.get("/", response_class=HTMLResponse)
-def home(response: Response,request: Request,yuki: Union[str] = Cookie(None)):
-    if check_cokie(yuki):
-        response.set_cookie("yuki","True",max_age=60 * 60 * 24 * 7)
-        return template("home.html",{"request": request})
-    return redirect("/blog")
+def home(request: Request):
+    return template("home.html", {"request": request})
 
 @app.get('/watch', response_class=HTMLResponse)
-def video(v:str,response: Response,request: Request,yuki: Union[str] = Cookie(None),proxy: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    response.set_cookie(key="yuki", value="True",max_age=7*24*60*60)
+def video(v: str, request: Request):
     videoid = v
     t = get_data(videoid)
-    response.set_cookie("yuki","True",max_age=60 * 60 * 24 * 7)
-    return template('video.html', {"request": request,"videoid":videoid,"videourls":t[1],"res":t[0],"description":t[2],"videotitle":t[3],"authorid":t[4],"authoricon":t[6],"author":t[5],"proxy":proxy})
+    return template('video.html', {
+        "request": request,
+        "videoid": videoid,
+        "videourls": t[1],
+        "res": t[0],
+        "description": t[2],
+        "videotitle": t[3],
+        "authorid": t[4],
+        "authoricon": t[6],
+        "author": t[5],
+    })
 
-@app.get("/search", response_class=HTMLResponse,)
-def search(q:str,response: Response,request: Request,page:Union[int,None]=1,yuki: Union[str] = Cookie(None),proxy: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    response.set_cookie("yuki","True",max_age=60 * 60 * 24 * 7)
-    return template("search.html", {"request": request,"results":get_search(q,page),"word":q,"next":f"/search?q={q}&page={page + 1}","proxy":proxy})
+@app.get("/search", response_class=HTMLResponse)
+def search(q: str, request: Request, page: Union[int, None] = 1):
+    return template("search.html", {
+        "request": request,
+        "results": get_search(q, page),
+        "word": q,
+        "next": f"/search?q={q}&page={page + 1}"
+    })
 
 @app.get("/hashtag/{tag}")
-def search(tag:str,response: Response,request: Request,page:Union[int,None]=1,yuki: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    return redirect(f"/search?q={tag}")
-
+def search_by_tag(tag: str):
+    return RedirectResponse(f"/search?q={tag}")
 
 @app.get("/channel/{channelid}", response_class=HTMLResponse)
-def channel(channelid:str,response: Response,request: Request,yuki: Union[str] = Cookie(None),proxy: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    response.set_cookie("yuki","True",max_age=60 * 60 * 24 * 7)
+def channel(channelid: str, request: Request):
     t = get_channel(channelid)
-    return template("channel.html", {"request": request,"results":t[0],"channelname":t[1]["channelname"],"channelicon":t[1]["channelicon"],"channelprofile":t[1]["channelprofile"],"proxy":proxy})
+    return template("channel.html", {
+        "request": request,
+        "results": t[0],
+        "channelname": t[1]["channelname"],
+        "channelicon": t[1]["channelicon"],
+        "channelprofile": t[1]["channelprofile"]
+    })
 
 @app.get("/answer", response_class=HTMLResponse)
-def set_cokie(q:str):
-    if q.count() > 10:
+def set_cokie(q: str):
+    if len(q) > 10:
         return "ランダム"
     return "文章"
 
 @app.get("/playlist", response_class=HTMLResponse)
-def playlist(list:str,response: Response,request: Request,page:Union[int,None]=1,yuki: Union[str] = Cookie(None),proxy: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    response.set_cookie("yuki","True",max_age=60 * 60 * 24 * 7)
-    return template("search.html", {"request": request,"results":get_playlist(list,str(page)),"word":"","next":f"/playlist?list={list}","proxy":proxy})
+def playlist(list: str, request: Request, page: Union[int, None] = 1):
+    return template("search.html", {
+        "request": request,
+        "results": get_playlist(list, str(page)),
+        "word": "",
+        "next": f"/playlist?list={list}"
+    })
 
 @app.get("/info", response_class=HTMLResponse)
-def viewlist(response: Response,request: Request,yuki: Union[str] = Cookie(None)):
-    global apis,apichannels,apicomments
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    response.set_cookie("yuki","True",max_age=60 * 60 * 24 * 7)
-    return template("info.html",{"request": request,"Youtube_API":apis[0],"Channel_API":apichannels[0],"Comments_API":apicomments[0]})
+def viewlist(request: Request):
+    global apis, apichannels, apicomments
+    return template("info.html", {
+        "request": request,
+        "Youtube_API": apis[0],
+        "Channel_API": apichannels[0],
+        "Comments_API": apicomments[0]
+    })
 
 @app.get("/suggest")
-def suggest(keyword:str):
-    return [i[0] for i in json.loads(requests.get(r"http://www.google.com/complete/search?client=youtube&hl=ja&ds=yt&q="+urllib.parse.quote(keyword)).text[19:-1])[1]]
+def suggest(keyword: str):
+    return [i[0] for i in json.loads(requests.get(
+        f"http://www.google.com/complete/search?client=youtube&hl=ja&ds=yt&q={urllib.parse.quote(keyword)}").text[19:-1])[1]]
 
 @app.get("/comments")
-def comments(request: Request,v:str):
-    return template("comments.html",{"request": request,"comments":get_comments(v)})
+def comments(request: Request, v: str):
+    return template("comments.html", {"request": request, "comments": get_comments(v)})
 
 @app.get("/thumbnail")
-def thumbnail(v:str):
-    return Response(content = requests.get(fr"https://img.youtube.com/vi/{v}/0.jpg").content,media_type=r"image/jpeg")
+def thumbnail(v: str):
+    return Response(content=requests.get(f"https://img.youtube.com/vi/{v}/0.jpg").content, media_type="image/jpeg")
 
-@app.get("/bbs",response_class=HTMLResponse)
-def view_bbs(request: Request,name: Union[str, None] = "",seed:Union[str,None]="",channel:Union[str,None]="main",verify:Union[str,None]="false",yuki: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    res = HTMLResponse(requests.get(fr"{url}bbs?name={urllib.parse.quote(name)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}",cookies={"yuki":"True"}).text)
+@app.get("/bbs", response_class=HTMLResponse)
+def view_bbs(request: Request, name: Union[str, None] = "", seed: Union[str, None] = "", channel: Union[str, None] = "main", verify: Union[str, None] = "false"):
+    res = HTMLResponse(requests.get(
+        f"{url}bbs?name={urllib.parse.quote(name)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}").text)
     return res
 
 @cache(seconds=5)
-def bbsapi_cached(verify,channel):
-    return requests.get(fr"{url}bbs/api?t={urllib.parse.quote(str(int(time.time()*1000)))}&verify={urllib.parse.quote(verify)}&channel={urllib.parse.quote(channel)}",cookies={"yuki":"True"}).text
+def bbsapi_cached(verify, channel):
+    return requests.get(f"{url}bbs/api?t={urllib.parse.quote(str(int(time.time()*1000)))}&verify={urllib.parse.quote(verify)}&channel={urllib.parse.quote(channel)}").text
 
-@app.get("/bbs/api",response_class=HTMLResponse)
-def view_bbs(request: Request,t: str,channel:Union[str,None]="main",verify: Union[str,None] = "false"):
-    print(fr"{url}bbs/api?t={urllib.parse.quote(t)}&verify={urllib.parse.quote(verify)}&channel={urllib.parse.quote(channel)}")
-    return bbsapi_cached(verify,channel)
+@app.get("/bbs/api", response_class=HTMLResponse)
+def view_bbs_api(t: str, channel: Union[str, None] = "main", verify: Union[str, None] = "false"):
+    return bbsapi_cached(verify, channel)
 
 @app.get("/bbs/result")
-def write_bbs(request: Request,name: str = "",message: str = "",seed:Union[str,None] = "",channel:Union[str,None]="main",verify:Union[str,None]="false",yuki: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
-    t = requests.get(fr"{url}bbs/result?name={urllib.parse.quote(name)}&message={urllib.parse.quote(message)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}&info={urllib.parse.quote(get_info(request))}",cookies={"yuki":"True"}, allow_redirects=False)
-    if t.status_code != 307:
-        return HTMLResponse(t.text)
-    return redirect(f"/bbs?name={urllib.parse.quote(name)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}")
+def write_bbs(name: str = "", message: str = "", seed: Union[str, None] = "", channel: Union[str, None] = "main", verify: Union[str, None] = "false"):
+    t = requests.get(f"{url}bbs/result?name={urllib.parse.quote(name)}&message={urllib.parse.quote(message)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}").text
+    return HTMLResponse(t)
 
 @cache(seconds=30)
 def how_cached():
-    return requests.get(fr"{url}bbs/how").text
+    return requests.get(f"{url}bbs/how").text
 
-@app.get("/bbs/how",response_class=PlainTextResponse)
-def view_commonds(request: Request,yuki: Union[str] = Cookie(None)):
-    if not(check_cokie(yuki)):
-        return redirect("/")
+@app.get("/bbs/how", response_class=PlainTextResponse)
+def view_commonds():
     return how_cached()
 
 @app.get("/load_instance")
 def home():
     global url
-    url = requests.get(r'https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
-
+    url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
 
 @app.exception_handler(500)
-def page(request: Request,__):
-    return template("APIwait.html",{"request": request},status_code=500)
+def page(request: Request, __):
+    return template("APIwait.html", {"request": request}, status_code=500)
 
 @app.exception_handler(APItimeoutError)
-def APIwait(request: Request,exception: APItimeoutError):
-    return template("APIwait.html",{"request": request},status_code=500)
+def APIwait(request: Request, exception: APItimeoutError):
+    return template("APIwait.html", {"request": request}, status_code=500)
