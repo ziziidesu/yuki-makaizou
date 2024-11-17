@@ -12,9 +12,9 @@ max_time = 10
 version = "1.0"
 
 apis = [
+    r"https://inv.nadeko.net/",
     r"https://iv.datura.network/",
     r"https://invidious.private.coffee/",
-    r"https://inv.nadeko.net/",
     r"https://invidious.protokolla.fi/",
     r"https://invidious.perennialte.ch/",
     r"https://yt.cdaut.de/",
@@ -126,7 +126,6 @@ def get_info(request):
     return json.dumps([version,os.environ.get('RENDER_EXTERNAL_URL'),str(request.scope["headers"]),str(request.scope['router'])[39:-2]])
     
 def get_data(videoid):
-    global logs
     t = json.loads(apirequest(r"api/v1/videos/"+ urllib.parse.quote(videoid)))
     return [{"id":i["videoId"],"title":i["title"],"authorId":i["authorId"],"author":i["author"],"viewCountText":i["viewCountText"]} for i in t["recommendedVideos"]],list(reversed([i["url"] for i in t["formatStreams"]]))[:2],t["descriptionHtml"].replace("\n","<br>"),t["title"],t["authorId"],t["author"],t["authorThumbnails"][-1]["url"]
 

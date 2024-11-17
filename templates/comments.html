@@ -90,20 +90,14 @@
     </style>
   </head>
   <body>
-{% for comment in comments %}
-<div class="comment-container">
-    <div class="pure-g" style="width: 100%">
-        <div class="channel-profile pure-u-4-24 pure-u-md-2-24">
-            <img loading="lazy" style="margin-right:1em; margin-top:1em; width:90%" 
-                 src="{{ comment['authoricon'] or '/path/to/default-thumbnail.jpg' }}">
+      {% for comment in comments %}
+      <div class="comment-container">
+        <img loading="lazy" src="{{ comment['authoricon'] or '/path/to/default-thumbnail.jpg' }}"/>
+        <div class="rVideoInfo">
+          <h4><a href="/channel/{{ comment['authorid'] }}">{{ comment['author'] or 'Anonymous' }}</a></h4>
+          <pre>{{ comment['body'] | safe }}</pre>
         </div>
-        <div class="pure-u-20-24 pure-u-md-22-24">
-            <p><b><a href="/channel/{{ comment['authorid'] }}">{{ comment['author'] or 'Anonymous' }}</a></b></p>
-            <p style="white-space: pre-wrap;">{{ comment['body'] | safe }}</p>
-            <div id="replies"></div>
-        </div>
-    </div>
-</div>
-{% endfor %}
+      </div>
+      {% endfor %}
   </body>
 </html>

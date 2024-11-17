@@ -307,6 +307,11 @@ function keydown(key) {
     }
   }
 }
+const video = document.getElementById("wakameVideo");
+const loopCheck = document.getElementById("loopCheck");
 
+loopCheck.addEventListener('change', function() {
+    video.loop = this.checked;
+});
 </script>
 </html>
