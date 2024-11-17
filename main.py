@@ -368,6 +368,10 @@ def home():
 def home(request: Request):
     return template("snowball.html", {"request": request})
   
+@app.get("/heddohon", response_class=HTMLResponse)
+def home(request: Request):
+    return template("more.html", {"request": request})
+  
 @app.get("/drive", response_class=HTMLResponse)
 def home(request: Request):
     return template("drive.html", {"request": request})
