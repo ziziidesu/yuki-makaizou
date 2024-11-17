@@ -122,7 +122,6 @@ def apicommentsrequest(url):
             apicomments.remove(api)
     raise APItimeoutError("APIがタイムアウトしました")
 
-
 def get_info(request):
     global version
     return json.dumps([version,os.environ.get('RENDER_EXTERNAL_URL'),str(request.scope["headers"]),str(request.scope['router'])[39:-2]])
@@ -133,42 +132,26 @@ def getting_data(videoid):
     return [{"id":i["videoId"],"title":i["title"],"authorId":i["authorId"],"author":i["author"],"viewCountText":i["viewCountText"]} for i in t["recommendedVideos"]],list(reversed([i["url"] for i in t["formatStreams"]]))[:2],t["descriptionHtml"].replace("\n","<br>"),t["title"],t["authorId"],t["author"],t["authorThumbnails"][-1]["url"]
 
 def get_data(videoid):
-    # API URLにリクエスト
     url = f"https://watawatawata.glitch.me/api/{urllib.parse.quote(videoid)}"
     response = requests.get(url)
-    
-    # レスポンスが正常ならば
     if response.status_code == 200:
         t = response.json()
-        
-        # 必要なデータを取り出す
         recommended_videos = [{
-            "id": t["videoId"],  # 動画ID
-            "title": t["videoTitle"],  # タイトル
-            "authorId": t["channelId"],  # 投稿者ID
-            "author": t["channelName"],  # 投稿者名
-            "viewCountText": f"{t['videoViews']} views"  # 視聴回数
+            "id": t["videoId"],
+            "title": t["videoTitle"],
+            "authorId": t["channelId"],
+            "author": t["channelName"],
+            "viewCountText": f"{t['videoViews']} views"
         }]
-        
-        # ストリームURL（低品質と高品質）
-        stream_urls = [t["stream_url"], t["highstreamUrl"]]
-        
-        # 動画の説明
+        stream_urls = t["stream_url"]
         description = t["videoDes"].replace("\n", "<br>")
-        
-        # 動画のタイトル
         title = t["videoTitle"]
-        
-        # 投稿者情報
         authorId = t["channelId"]
         author = t["channelName"]
-        author_icon = t["channelImage"]  # サムネイル画像
-        
+        author_icon = t["channelImage"] 
         return recommended_videos, stream_urls, description, title, authorId, author, author_icon
     else:
-        # エラーが発生した場合は空のデータを返す
         return None, None, None, None, None, None, None
-
   
 def get_search(q,page):
     global logs
