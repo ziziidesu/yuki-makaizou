@@ -148,7 +148,7 @@ def getting_data(videoid):
         authorId = t["channelId"]
         author = t["channelName"]
         author_icon = t["channelImage"] 
-        return recommended_videos, stream_urls, description, title, authorId, author, author_icon
+        return recommended_videos, stream_url, description, title, authorId, author, author_icon
     else:
         return None, None, None, None, None, None, None
   
@@ -163,7 +163,7 @@ def get_search(q,page):
         else:
             if i["authorThumbnails"][-1]["url"].startswith("https"):
                 return {"author":i["author"],"id":i["authorId"],"thumbnail":i["authorThumbnails"][-1]["url"],"type":"channel"}
-            else:
+            
                 return {"author":i["author"],"id":i["authorId"],"thumbnail":r"https://"+i["authorThumbnails"][-1]["url"],"type":"channel"}
     return [load_search(i) for i in t]
 
