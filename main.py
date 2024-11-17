@@ -142,7 +142,7 @@ def getting_data(videoid):
             "author": t["channelName"],
             "viewCountText": f"{t['videoViews']} views"
         }]
-        stream_urls = t["stream_url"]
+        stream_url = t["stream_url"]
         description = t["videoDes"].replace("\n", "<br>")
         title = t["videoTitle"]
         authorId = t["channelId"]
