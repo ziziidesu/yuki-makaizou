@@ -279,7 +279,8 @@ def thumbnail(v: str):
 def home():
     global url
     url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
-
+    
+    
 @app.exception_handler(500)
 def page(request: Request, __):
     return template("APIwait.html", {"request": request}, status_code=500)
