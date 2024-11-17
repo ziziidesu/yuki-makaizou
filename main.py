@@ -270,8 +270,16 @@ def home():
     url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
     
 @app.get("/snowball", response_class=HTMLResponse)
-async def snowball(request: Request):
-    return templates.TemplateResponse("snowball.html", {"request": request})
+def home(request: Request):
+    return template("snowball.html", {"request": request})
+  
+@app.get("/drive", response_class=HTMLResponse)
+def home(request: Request):
+    return template("drive.html", {"request": request})
+  
+@app.get("/android", response_class=HTMLResponse)
+def home(request: Request):
+    return template("android.html", {"request": request})
     
 @app.exception_handler(500)
 def page(request: Request, __):
