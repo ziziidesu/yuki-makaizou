@@ -135,6 +135,7 @@ def getting_data(videoid):
     response = requests.get(url)
     if response.status_code == 200:
         t = response.json()
+        print(t)
         recommended_videos = [{
             "id": t["videoId"],
             "title": t["videoTitle"],
@@ -163,7 +164,7 @@ def get_search(q,page):
         else:
             if i["authorThumbnails"][-1]["url"].startswith("https"):
                 return {"author":i["author"],"id":i["authorId"],"thumbnail":i["authorThumbnails"][-1]["url"],"type":"channel"}
-            
+            else:
                 return {"author":i["author"],"id":i["authorId"],"thumbnail":r"https://"+i["authorThumbnails"][-1]["url"],"type":"channel"}
     return [load_search(i) for i in t]
 
@@ -229,7 +230,7 @@ def video(v: str, request: Request):
     return template('video.html', {
         "request": request,
         "videoid": videoid,
-        "videourl": t[1],
+        "videourls": t[1],
         "res": t[0],
         "description": t[2],
         "videotitle": t[3],
@@ -245,7 +246,7 @@ def video(v: str, request: Request):
     return template('video.html', {
         "request": request,
         "videoid": videoid,
-        "videourl": t[1],
+        "videourls": t[1],
         "res": t[0],
         "description": t[2],
         "videotitle": t[3],
