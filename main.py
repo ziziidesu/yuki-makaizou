@@ -122,7 +122,6 @@ def apicommentsrequest(url):
             apicomments.remove(api)
     raise APItimeoutError("APIがタイムアウトしました")
 
-
 def get_info(request):
     global version
     return json.dumps([version,os.environ.get('RENDER_EXTERNAL_URL'),str(request.scope["headers"]),str(request.scope['router'])[39:-2]])
@@ -175,7 +174,6 @@ def check_cokie(cookie):
         return True
     return True
 
-
 from fastapi import FastAPI, Depends
 from fastapi import Response,Cookie,Request
 from fastapi.responses import HTMLResponse,PlainTextResponse
@@ -192,7 +190,6 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 from fastapi.templating import Jinja2Templates
 template = Jinja2Templates(directory='templates').TemplateResponse
-
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
@@ -279,7 +276,6 @@ def thumbnail(v: str):
 def home():
     global url
     url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
-    
     
 @app.exception_handler(500)
 def page(request: Request, __):
