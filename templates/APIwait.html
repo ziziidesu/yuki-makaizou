@@ -28,7 +28,6 @@
     <button id="redirectButton">別の処理方法を試す</button>
     <script>setTimeout(function(){location.reload();},1000);</script>
 <script>
-  
     document.getElementById('redirectButton').addEventListener('click', function() {
       const urlParams = new URLSearchParams(window.location.search);
       const vValue = urlParams.get('v');
