@@ -280,6 +280,77 @@ def home():
     global url
     url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
 
+def extract_video_id(url: str) -> str:
+    # 正規表現を使ってYouTubeのvideoIdを取得
+    youtube_pattern = r'(https?://(?:www\.)?youtube\.com/watch\?v=|youtu\.be/)([a-zA-Z0-9_-]+)'
+    match = urllib.parse.urlparse(url)
+    if match.netloc == 'youtu.be' or 'youtube.com' in match.netloc:
+        video_id = re.search(r'(?:v=|\/)([a-zA-Z0-9_-]+)', url)
+        if video_id:
+            return video_id.group(1)
+    return None
+
+# APIから動画情報を取得する関数
+def get_video_data(video_id: str) -> Union[dict, None]:
+    # 仮のAPIURL、実際のAPIに置き換えてください
+    api_url = f"https://watawatawata.glitch.me/api/{video_id}"
+    try:
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            return response.json()
+    except requests.RequestException as e:
+        return None
+
+# データ受け取りのためのPydanticモデル
+class YouTubeURL(BaseModel):
+    youtube_url: str
+
+# ルートページ（YouTubeのURL入力フォーム）
+@app.get("/", response_class=HTMLResponse)
+async def get_form():
+    return """
+    <html>
+        <head>
+            <title>YouTube Video Fetcher</title>
+        </head>
+        <body>
+            <h1>YouTube Video Fetcher</h1>
+            <form action="/ytss" method="POST">
+                <label for="youtube_url">YouTube URL:</label>
+                <input type="text" id="youtube_url" name="youtube_url" required>
+                <button type="submit">Fetch Video Info</button>
+            </form>
+        </body>
+    </html>
+    """
+
+# YouTube URLをPOSTで受け取り、/video/:idにリダイレクト
+@app.post("/ytss")
+async def submit_url(request: Request, youtube_url: YouTubeURL):
+    video_id = extract_video_id(youtube_url.youtube_url)
+    if video_id:
+        # videoIdを取得した場合、/video/:idにリダイレクト
+        return RedirectResponse(url=f"/video/{video_id}")
+    else:
+        return Response("Invalid YouTube URL", status_code=400)
+
+@app.get("/video/{video_id}", response_class=HTMLResponse)
+async def get_video_info(video_id: str):
+    video_data = get_video_data(video_id)
+    if video_data:
+        return f"""
+        <html>
+            <head><title>Video Information</title></head>
+            <body>
+                <h1>Video Information for {video_id}</h1>
+                <pre>{json.dumps(video_data, indent=4)}</pre>
+            </body>
+        </html>
+        """
+    else:
+        return Response("Video not found", status_code=404)
+
+    
 @app.exception_handler(500)
 def page(request: Request, __):
     return template("APIwait.html", {"request": request}, status_code=500)
