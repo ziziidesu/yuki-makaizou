@@ -25,10 +25,8 @@
 <body>
 <header>
   <div class="banner">
-   <button class="btn btn-link" onclick="window.location.href='/'">ホーム🏠</button>
-   <button class="btn btn-link" onclick="window.location.href='/send'">問い合わせ</button>
-  <button class="btn btn-link" onclick="window.location.href='/blog/help'">ヘルプ</button>
-      <form class="d-flex" action="/s" method="get">
+   <button class="btn btn-link" onclick="window.location.href='/home'">ホーム🏠</button>
+      <form class="d-flex" action="/search" method="get">
           <input id="searchbox" name="q" class="form-control" type="text" placeholder="キーワードを入力..." aria-label="Search" required>
       </form>
    <button class="btn btn-link" id="menu-btn" style="position: absolute; right: 10px;">ツール</button>
@@ -41,14 +39,7 @@
         <input type="checkbox" id="loopCheck">
         <span class="checkmark"></span>
         </label></li>
-        <li><a href="/pytdf/<%= videoId %>">ダウンロード</a></li>
-        <li><a href="<%= stream_url %>" target="_blank">ストリームURLに移動</a></li>
-        <li><a href="/ll/<%= videoId %>">音のみで再生する</a></li>
-        <li><a href="/www/<%= videoId %>">高画質で再生する</a></li>
-        <li><a href="/vi/<%= videoId %>/maxresdefault.jpg" target="_blank">サムネイルをダウンロード</a></li>
-        <li><a href="/wakameokini">お気に入りへ移動</a></li>
-        <li><a href="/wakamehistory">再生履歴</a></li>
-        <li><a href="/blog/up" target="_blank">アップデートを確認</a></li>
+        <li><a href="{{ videourls }}" target="_blank">ストリームURLに移動</a></li>
     </ul>
 </nav>
 <div id="overlay" class="overlay"></div>
@@ -56,7 +47,7 @@
     <div class="loading-indicator">
         <img src="https://cdn.glitch.global/3128bf45-3a23-4695-81ba-3aba21b8585b/IMG_1966.gif?v=1729824394361" alt="Loading..." />
     </div>
-  <video id="wakameVideo" controls autoplay poster="/vi/<%= videoId %>/maxresdefault.jpg">
+  <video id="wakameVideo" controls autoplay poster="{% if proxy == 'True' %}/thumbnail?v={{ videoid }}{% else %}https://img.youtube.com/vi/{{ videoid }}/0.jpg{% endif %}">
     <source src="{{ videourls }}" type="video/mp4">
     読み込み失敗。ブラウザをアップデートしてどうぞ。
   </video>
@@ -64,7 +55,7 @@
 <div class="card">
   <div class="toolcard-header">
     <small class="text-muted">「ツール」は右上に移動しました。</small>
-    <small class="text-muted float-right"><button id="reloadButton">動画を再読み込み</button><button class="favorite-btn" onclick="toggleFavorite('<%= videoId %>', '<%= channelId %>', '<%= channelName %>','<%= videoTitle %>')">お気に入り</button></small>
+    <small class="text-muted float-right"><button id="reloadButton">動画を再読み込み</button></small>
   </div>
   <div class="card-channel">
     <div class="container">
@@ -259,10 +250,33 @@ video {
 }
   </style>
 <script>
+const menuBtn = document.getElementById('menu-btn');
+const sideMenu = document.getElementById('side-menu');
+const overlay = document.getElementById('overlay');
+
+function toggleMenu() {
+    sideMenu.classList.toggle('open');
+    overlay.classList.toggle('active');
+}
+
+menuBtn.addEventListener('click', toggleMenu);
+
+overlay.addEventListener('click', toggleMenu);
 document.getElementById('reloadButton').addEventListener('click', function() {
     const video = document.getElementById('wakameVideo');
     
     video.load();
 });
+$('#searchbox').autocomplete({
+            source: function (request, response) {
+                {
+            var url = "/suggest?keyword="+ request.term
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url);
+            xhr.onload = function() {
+                response(JSON.parse(xhr.responseText));
+            }
+            xhr.send();
+        }},delay:300});
 </script>
 </html>

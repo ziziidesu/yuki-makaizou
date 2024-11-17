@@ -228,7 +228,7 @@ def home(request: Request):
 def video(v: str, request: Request):
     videoid = v
     t = get_data(videoid)
-    return template('video.html', {
+    return template('watch.html', {
         "request": request,
         "videoid": videoid,
         "videourls": t[1],
@@ -241,6 +241,7 @@ def video(v: str, request: Request):
     })
 
 @app.get('/video2', response_class=HTMLResponse)
+async def video2(request: Request):
     return template('watch.html', {
         "request": request,
         "videoid": "Kapy4ZGlhpU",
