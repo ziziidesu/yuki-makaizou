@@ -293,20 +293,6 @@ def video(v: str, request: Request):
         "authoricon": t[6],
         "author": t[5],
     })
-
-@app.get('/video2', response_class=HTMLResponse)
-async def video2(request: Request):
-    return template('watchwa.html', {
-        "request": request,
-        "videoid": "Kapy4ZGlhpU",
-        "videourls": "https://cdn.glitch.global/afdfa13f-436f-464b-84a1-e2f59bc4e2fa/videoplayback%205.mp4",
-        "res": "",
-        "description": "",
-        "videotitle": "花に亡霊",
-        "authorid": "",
-        "authoricon": "",
-        "author": "",
-    })
     
 @app.get('/video', response_class=HTMLResponse)
 def video(v: str, request: Request):
@@ -314,7 +300,7 @@ def video(v: str, request: Request):
     t = getting_data(videoid)
     print(t)
     print(t[1])
-    return template('watch.html', {
+    return template('watchwa.html', {
         "request": request,
         "videoid": videoid,
         "res": t[0],
