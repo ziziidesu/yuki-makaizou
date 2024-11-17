@@ -247,6 +247,11 @@ def set_cokie(q: str):
     if len(q) > 10:
         return "ランダム"
     return "文章"
+  
+
+@app.get("/snowball", response_class=HTMLResponse)
+def home(request: Request):
+    return template("snowball.html", {"request": request})
 
 @app.get("/playlist", response_class=HTMLResponse)
 def playlist(list: str, request: Request, page: Union[int, None] = 1):
