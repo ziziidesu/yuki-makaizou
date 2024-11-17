@@ -240,6 +240,19 @@ def video(v: str, request: Request):
         "author": t[5],
     })
 
+@app.get('/video2', response_class=HTMLResponse)
+    return template('watch.html', {
+        "request": request,
+        "videoid": "Kapy4ZGlhpU",
+        "videourls": "https://cdn.glitch.global/afdfa13f-436f-464b-84a1-e2f59bc4e2fa/videoplayback%205.mp4",
+        "res": "",
+        "description": "",
+        "videotitle": "花に亡霊",
+        "authorid": "",
+        "authoricon": "",
+        "author": "",
+    })
+    
 @app.get('/video', response_class=HTMLResponse)
 def video(v: str, request: Request):
     videoid = v

@@ -92,6 +92,7 @@
               id="loop"
               onchange="changeloop()"
             />
+            {% for re in res %}
             <a href="/watch?v={{ re['id'] }}">
               <div class="thumbnail">
                 <img loading="lazy" class="thumbnail" src="{% if proxy == "True"
@@ -103,7 +104,7 @@
             <a href="/channel/{{re['authorId']}}">{{re["author"]}}</a>
             <b class="flex-right" style="text-align: end"
               >{{re["viewCountText"]}}</b
-            
+            >{% endfor %}
           </div>
         </div>
       </div>
