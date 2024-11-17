@@ -1,6 +1,6 @@
 ヘッドホン崇め奉ってます。
 
-YUKIyouTubeの改造版です(暇)。メンテは一応行うつもりなので規制回避に使うならRemixはおすすめしません。
+YUKIyouTubeの改造版です(暇)。
 
 Renderを使用する場合の手順  
 1~4の作業をやらないと、自動でURLがyuki-math-blog-[4桁の英数字].onrender.comになります。  
