@@ -247,33 +247,6 @@ def comments(request: Request, v: str):
 def thumbnail(v: str):
     return Response(content=requests.get(f"https://img.youtube.com/vi/{v}/0.jpg").content, media_type="image/jpeg")
 
-@app.get("/bbs", response_class=HTMLResponse)
-def view_bbs(request: Request, name: Union[str, None] = "", seed: Union[str, None] = "", channel: Union[str, None] = "main", verify: Union[str, None] = "false"):
-    res = HTMLResponse(requests.get(
-        f"{url}bbs?name={urllib.parse.quote(name)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}").text)
-    return res
-
-@cache(seconds=5)
-def bbsapi_cached(verify, channel):
-    return requests.get(f"{url}bbs/api?t={urllib.parse.quote(str(int(time.time()*1000)))}&verify={urllib.parse.quote(verify)}&channel={urllib.parse.quote(channel)}").text
-
-@app.get("/bbs/api", response_class=HTMLResponse)
-def view_bbs_api(t: str, channel: Union[str, None] = "main", verify: Union[str, None] = "false"):
-    return bbsapi_cached(verify, channel)
-
-@app.get("/bbs/result")
-def write_bbs(name: str = "", message: str = "", seed: Union[str, None] = "", channel: Union[str, None] = "main", verify: Union[str, None] = "false"):
-    t = requests.get(f"{url}bbs/result?name={urllib.parse.quote(name)}&message={urllib.parse.quote(message)}&seed={urllib.parse.quote(seed)}&channel={urllib.parse.quote(channel)}&verify={urllib.parse.quote(verify)}").text
-    return HTMLResponse(t)
-
-@cache(seconds=30)
-def how_cached():
-    return requests.get(f"{url}bbs/how").text
-
-@app.get("/bbs/how", response_class=PlainTextResponse)
-def view_commonds():
-    return how_cached()
-
 @app.get("/load_instance")
 def home():
     global url
