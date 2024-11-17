@@ -47,26 +47,32 @@ def is_json(json_str):
         pass
     return result
 
-def apirequest(url):
+def apirequest(url, headers=None):
     global apis
     global max_time
     starttime = time.time()
+
+    if headers is None:
+        headers = {}
+
     for api in apis:
-        if  time.time() - starttime >= max_time -1:
+        if time.time() - starttime >= max_time - 1:
             break
         try:
-            res = requests.get(api+url,timeout=max_api_wait_time)
+            res = requests.get(api + url, headers=headers, timeout=10)
+
             if res.status_code == 200 and is_json(res.text):
                 return res.text
             else:
                 print(f"エラー:{api}")
                 apis.append(api)
                 apis.remove(api)
-        except:
-            print(f"タイムアウト:{api}")
+        except Exception as e:
+            print(f"タイムアウト:{api}, エラー: {e}")
             apis.append(api)
             apis.remove(api)
     raise APItimeoutError("APIがタイムアウトしました")
+
 
 def apichannelrequest(url):
     global apichannels
@@ -116,8 +122,17 @@ def get_info(request):
     
 def get_data(videoid):
     global logs
-    t = json.loads(apirequest(r"api/v1/videos/"+ urllib.parse.quote(videoid)))
-    return [{"id":i["videoId"],"title":i["title"],"authorId":i["authorId"],"author":i["author"],"viewCountText":i["viewCountText"]} for i in t["recommendedVideos"]],list(reversed([i["url"] for i in t["formatStreams"]]))[:2],t["descriptionHtml"].replace("\n","<br>"),t["title"],t["authorId"],t["author"],t["authorThumbnails"][-1]["url"]
+
+    headers = {
+        "Cache-Control": "no-cache"
+    }
+    response = apirequest(r"api/v1/videos/" + urllib.parse.quote(videoid), headers=headers)
+    t = json.loads(response)
+    return [
+        {"id": i["videoId"], "title": i["title"], "authorId": i["authorId"], 
+         "author": i["author"], "viewCountText": i["viewCountText"]} 
+        for i in t["recommendedVideos"]
+    ], list(reversed([i["url"] for i in t["formatStreams"]]))[:2], t["descriptionHtml"].replace("\n", "<br>"), t["title"], t["authorId"], t["author"], t["authorThumbnails"][-1]["url"]
     
 def getting_data(videoid):
     url = f"https://watawatawata.glitch.me/api/{urllib.parse.quote(videoid)}"
