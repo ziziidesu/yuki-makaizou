@@ -245,7 +245,7 @@ def video(v: str, request: Request):
     videoid = v
     t = getting_data(videoid)
     print(t)
-    return template('video.html', {
+    return template('watch.html', {
         "request": request,
         "videoid": videoid,
         "videourls": t[1],
