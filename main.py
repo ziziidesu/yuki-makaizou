@@ -10,7 +10,7 @@ from cache import cache
 
 max_api_wait_time = 3
 max_time = 10
-apis = [r"https://invidious.lunar.icu/",r"https://onion.tube/",r"https://inv.riverside.rocks/",r"https://invidio.xamh.de/",r"https://y.com.sb/",r"https://invidious.sethforprivacy.com/",r"https://invidious.tiekoetter.com/",r"https://inv.bp.projectsegfau.lt/",r"https://inv.vern.cc/",r"https://invidious.nerdvpn.de/",r"https://inv.privacy.com.de/",r"https://invidious.rhyshl.live/",r"https://invidious.slipfox.xyz/",r"https://invidious.weblibre.org/",r"https://invidious.namazso.eu/"]
+apis = [r"https://iv.datura.network/",r"https://invidious.private.coffee/",r"https://invidious.protokolla.fi/",r"https://invidious.perennialte.ch/",r"https://yt.cdaut.de/",r"https://invidious.materialio.us/",r"https://yewtu.be/",r"https://invidious.fdn.fr/",r"https://inv.tux.pizza/",r"https://invidious.privacyredirect.com/",r"https://invidious.drgns.space/",r"https://vid.puffyan.us",r"https://invidious.jing.rocks/",r"https://youtube.076.ne.jp/",r"https://vid.puffyan.us/",r"https://inv.riverside.rocks/",r"https://invidio.xamh.de/",r"https://y.com.sb/",r"https://invidious.sethforprivacy.com/",r"https://invidious.tiekoetter.com/",r"https://inv.bp.projectsegfau.lt/",r"https://inv.vern.cc/",r"https://invidious.nerdvpn.de/",r"https://inv.privacy.com.de/",r"https://invidious.rhyshl.live/",r"https://invidious.slipfox.xyz/",r"https://invidious.weblibre.org/",r"https://invidious.namazso.eu/",r"https://invidious.jing.rocks"]
 url = requests.get(r'https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
 version = "1.0"
 
@@ -158,7 +158,6 @@ from typing import Union
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 app.mount("/css", StaticFiles(directory="./css"), name="static")
-app.mount("/blog", StaticFiles(directory="./blog", html=True), name="static")
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 from fastapi.templating import Jinja2Templates
@@ -166,6 +165,10 @@ template = Jinja2Templates(directory='templates').TemplateResponse
 
 
 @app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return template("heddohon.html", {"request": request})
+  
+@app.get("/home", response_class=HTMLResponse)
 def home(request: Request):
     return template("home.html", {"request": request})
 
