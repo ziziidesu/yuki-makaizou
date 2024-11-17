@@ -1,167 +1,181 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ヘッドホン万歳！</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #6a11cb, #2575fc);
-            color: #fff;
-            text-align: center;
-            overflow: hidden;
-        }
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(to bottom, #6a11cb, #2575fc);
+        color: #fff;
+        text-align: center;
+        overflow: hidden;
+      }
 
-        /* ロード演出 */
-        #loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.1);
-            font-size: 3rem;
-            animation: spin-grow 2s ease-out forwards;
-        }
+      #loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        font-size: 3rem;
+        animation: spin-grow 2s ease-out forwards;
+      }
 
-        @keyframes spin-grow {
-            0% { transform: translate(-50%, -50%) scale(0.1) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) scale(1.5) rotate(360deg); }
-            100% { transform: translate(-50%, -50%) scale(0) rotate(720deg); }
+      @keyframes spin-grow {
+        0% {
+          transform: translate(-50%, -50%) scale(0.1) rotate(0deg);
         }
+        50% {
+          transform: translate(-50%, -50%) scale(1.5) rotate(360deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(0) rotate(720deg);
+        }
+      }
 
-        /* ホームページ表示 */
-        #content {
-            display: none;
-            padding: 20px;
-        }
+      #content {
+        display: none;
+        padding: 20px;
+      }
 
-        h1 {
-            margin-top: 20px;
-            font-size: 2.5rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
+      h1 {
+        margin-top: 20px;
+        font-size: 2.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
 
-        button {
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            color: #fff;
-            background-color: #ff5f7e;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+      button {
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        color: #fff;
+        background-color: #ff5f7e;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-        }
+      button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+      }
 
-        p {
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin: 10px auto;
-            max-width: 600px;
-        }
+      p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        margin: 10px auto;
+        max-width: 600px;
+      }
 
-        a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.5rem;
-            display: inline-block;
-            margin-top: 20px;
-            border: 2px solid #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
+      a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.5rem;
+        display: inline-block;
+        margin-top: 20px;
+        border: 2px solid #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+      }
 
-        a:hover {
-            background-color: #fff;
-            color: #2575fc;
-        }
+      a:hover {
+        background-color: #fff;
+        color: #2575fc;
+      }
 
-        /* 機能一覧セクション */
-        #features {
-            margin: 40px 20px;
-        }
+      #features {
+        margin: 40px 20px;
+      }
 
-        #features h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
+      #features h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
 
-        .feature {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 10px auto;
-            max-width: 400px;
-            text-align: left;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+      .feature {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px auto;
+        max-width: 400px;
+        text-align: left;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
 
-        .feature h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #ffdc62;
-        }
+      .feature h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #ffdc62;
+      }
 
-        .feature p {
-            font-size: 1rem;
-            line-height: 1.5;
-        }
+      .feature p {
+        font-size: 1rem;
+        line-height: 1.5;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="loader">🎧</div>
 
     <div id="content">
-        <h1>ヘッドホン万歳！</h1>
-        <button id="bgm-button">🎵 bgmを再生する 🎵</button>
-        <audio id="bgm-audio" src="https://cdn.glitch.global/afdfa13f-436f-464b-84a1-e2f59bc4e2fa/videoplayback%205.mp4" loop></audio>
-        <p>
-            こんにちは！私のサイトに訪れてくれてありがとうございます。<br>ヘッドホンです<br>
-            ネタかどうかを見極める力が欲しいですね。
-        </p>
-        <a href="https://scratch.mit.edu/users/saibansyo" target="_blank">Follow 🎧!</a>
+      <h1>ヘッドホン万歳！</h1>
+      <button id="bgm-button">🎵 bgmを再生する 🎵</button>
+      <audio
+        id="bgm-audio"
+        src="https://cdn.glitch.global/afdfa13f-436f-464b-84a1-e2f59bc4e2fa/videoplayback%205.mp4"
+        loop
+      ></audio>
+      <p>
+        こんにちは！私のサイトに訪れてくれてありがとうございます。<br />ヘッドホンです<br />
+        ネタかどうかを見極める力が欲しいですね。
+      </p>
+      <a href="https://scratch.mit.edu/users/saibansyo" target="_blank"
+        >Follow 🎧!</a
+      >
 
-        <div id="features">
-            <h2>🎉 機能一覧 🎉</h2>
-            <a href="/home"><div class="feature">
-                <h3>📺 YouTube</h3>
-                <p>好きなYouTube動画を再生できます。気になる動画を探してみてください！</p>
-            </div></a>
-        </div>
+      <div id="features">
+        <h2>🎉 機能一覧 🎉</h2>
+        <a href="/home"
+          ><div class="feature">
+            <h3>📺 YouTube</h3>
+            <p>
+              好きなYouTube動画を再生できます。気になる動画を探してみてください！
+            </p>
+          </div></a
+        >
+      </div>
     </div>
 
     <script>
-        window.onload = function() {
-            setTimeout(() => {
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('content').style.display = 'block';
-            }, 2000);
-        };
+      window.onload = function () {
+        setTimeout(() => {
+          document.getElementById("loader").style.display = "none";
+          document.getElementById("content").style.display = "block";
+        }, 2000);
+      };
 
-        const bgmButton = document.getElementById('bgm-button');
-        const bgmAudio = document.getElementById('bgm-audio');
+      const bgmButton = document.getElementById("bgm-button");
+      const bgmAudio = document.getElementById("bgm-audio");
 
-        bgmButton.addEventListener('click', () => {
-            if (bgmAudio.paused) {
-                bgmAudio.play();
-                bgmButton.textContent = "⏸️ bgmを停止する ⏸️";
-            } else {
-                bgmAudio.pause();
-                bgmButton.textContent = "🎵 bgmを再生する 🎵";
-            }
-        });
+      bgmButton.addEventListener("click", () => {
+        if (bgmAudio.paused) {
+          bgmAudio.play();
+          bgmButton.textContent = "⏸️ bgmを停止する ⏸️";
+        } else {
+          bgmAudio.pause();
+          bgmButton.textContent = "🎵 bgmを再生する 🎵";
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

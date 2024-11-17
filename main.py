@@ -21,12 +21,12 @@ apis = [
     r"https://invidious.materialio.us/",
     r"https://yewtu.be/",
     r"https://invidious.fdn.fr/",
-    r"https://inv.tux.pizza/",
+    r"https://invidious.qwik.space/",
     r"https://invidious.privacyredirect.com/",
     r"https://invidious.drgns.space/",
     r"https://vid.puffyan.us",
     r"https://invidious.jing.rocks/",
-    r"https://youtube.076.ne.jp/",
+    r"https://invidious.nerdvpn.de/",
     r"https://vid.puffyan.us/",
     r"https://inv.riverside.rocks/",
     r"https://invidio.xamh.de/",
@@ -35,10 +35,10 @@ apis = [
     r"https://invidious.tiekoetter.com/",
     r"https://inv.bp.projectsegfau.lt/",
     r"https://inv.vern.cc/",
-    r"https://invidious.nerdvpn.de/",
+    r"https://iteroni.com/",
     r"https://inv.privacy.com.de/",
     r"https://invidious.rhyshl.live/",
-    r"https://invidious.slipfox.xyz/",
+    r"https://inv.nadeko.net/",
     r"https://invidious.weblibre.org/",
     r"https://invidious.namazso.eu/",
     r"https://invidious.jing.rocks",
@@ -255,16 +255,6 @@ def playlist(list: str, request: Request, page: Union[int, None] = 1):
         "results": get_playlist(list, str(page)),
         "word": "",
         "next": f"/playlist?list={list}"
-    })
-
-@app.get("/info", response_class=HTMLResponse)
-def viewlist(request: Request):
-    global apis, apichannels, apicomments
-    return template("info.html", {
-        "request": request,
-        "Youtube_API": apis[0],
-        "Channel_API": apichannels[0],
-        "Comments_API": apicomments[0]
     })
 
 @app.get("/suggest")
