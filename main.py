@@ -127,21 +127,8 @@ def get_info(request):
     
 def get_data(videoid):
     global logs
-    t = json.loads(apirequest(r"api/v1/videos/" + urllib.parse.quote(videoid)))
-
-    format_streams = t["formatStreams"]
-    stream_urls = [i["url"] for i in format_streams]
-
-    stream_urls = list(reversed(stream_urls))[:2]
-    stream_url = stream_urls[0] if stream_urls else None
-    related_videos = [{"id": i["videoId"], "title": i["title"], "authorId": i["authorId"], "author": i["author"], "viewCountText": i["viewCountText"]} for i in t["recommendedVideos"]]
-    description = t["descriptionHtml"].replace("\n", "<br>")
-    title = t["title"]
-    author_id = t["authorId"]
-    author = t["author"]
-    author_thumbnail = t["authorThumbnails"][-1]["url"]
-    return related_videos, stream_urls, description, title, author_id, author, author_thumbnail, stream_url
-
+    t = json.loads(apirequest(r"api/v1/videos/"+ urllib.parse.quote(videoid)))
+    return [{"id":i["videoId"],"title":i["title"],"authorId":i["authorId"],"author":i["author"],"viewCountText":i["viewCountText"]} for i in t["recommendedVideos"]],list(reversed([i["url"] for i in t["formatStreams"]]))[:2],t["descriptionHtml"].replace("\n","<br>"),t["title"],t["authorId"],t["author"],t["authorThumbnails"][-1]["url"]
     
 def getting_data(videoid):
     url = f"https://watawatawata.glitch.me/api/{urllib.parse.quote(videoid)}"

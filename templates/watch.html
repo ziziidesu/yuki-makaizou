@@ -39,7 +39,9 @@
         <input type="checkbox" id="loopCheck">
         <span class="checkmark"></span>
         </label></li>
-        <li><a href="{{ videourls }}" target="_blank">ストリームURLに移動</a></li>
+        {% for videourl in videourls%}
+        <li><a href="{{ videourl }}" target="_blank">ストリームURLに移動</a></li>
+        {% endfor %}
         <li><a href="https://github.com/sadaramagura" target="_blank">GitHub</a></li>
     </ul>
 </nav>
@@ -49,7 +51,9 @@
         <img src="https://cdn.glitch.global/3128bf45-3a23-4695-81ba-3aba21b8585b/IMG_1966.gif?v=1729824394361" alt="Loading..." />
     </div>
   <video id="wakameVideo" controls autoplay poster="{% if proxy == 'True' %}/thumbnail?v={{ videoid }}{% else %}https://img.youtube.com/vi/{{ videoid }}/0.jpg{% endif %}">
-    <source src="{{ videourls }}" type="video/mp4">
+    {% for videourl in videourls%}
+    <source src="{{ videourl }}" type="video/mp4">
+    {% endfor %}
     読み込み失敗。ブラウザをアップデートしてどうぞ。
   </video>
 </div>
