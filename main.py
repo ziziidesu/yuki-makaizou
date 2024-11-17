@@ -209,6 +209,7 @@ from typing import Union
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 app.mount("/css", StaticFiles(directory="./css"), name="static")
+app.mount("/js", StaticFiles(directory="./js"), name="javascript")
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 from fastapi.templating import Jinja2Templates
@@ -243,6 +244,7 @@ def video(v: str, request: Request):
 def video(v: str, request: Request):
     videoid = v
     t = getting_data(videoid)
+    print(t)
     return template('video.html', {
         "request": request,
         "videoid": videoid,
