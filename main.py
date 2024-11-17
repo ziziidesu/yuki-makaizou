@@ -33,7 +33,6 @@ videoapis = [
 ];
 
 apis = [
-apis = [
     r"https://invidious.jing.rocks/",
     r"https://invidious.nerdvpn.de/",
     r"https://inv.nadeko.net/",
@@ -147,7 +146,6 @@ r"https://invidious.esmailelbob.xyz",
 r"https://invidious.projectsegfau.lt",
 r"https://invidious.dhusch.de/",
 r"https://inv.odyssey346.dev/"
-]
 ]
 
 apichannels = []
