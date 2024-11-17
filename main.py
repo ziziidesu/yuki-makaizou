@@ -229,7 +229,7 @@ def video(v: str, request: Request):
     return template('video.html', {
         "request": request,
         "videoid": videoid,
-        "videourls": t[1],
+        "videourl": t[1],
         "res": t[0],
         "description": t[2],
         "videotitle": t[3],
@@ -245,7 +245,7 @@ def video(v: str, request: Request):
     return template('video.html', {
         "request": request,
         "videoid": videoid,
-        "videourls": t[1],
+        "videourl": t[1],
         "res": t[0],
         "description": t[2],
         "videotitle": t[3],
