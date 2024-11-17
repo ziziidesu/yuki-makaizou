@@ -180,7 +180,6 @@ def get_info(request):
     
 def get_data(videoid):
     global logs
-
     headers = {
         "Cache-Control": "no-cache"
     }
