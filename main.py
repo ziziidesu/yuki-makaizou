@@ -7,7 +7,6 @@ import random
 import os
 from cache import cache
 
-
 max_api_wait_time = 5
 max_time = 10
 version = "1.0"
