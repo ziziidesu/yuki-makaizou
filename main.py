@@ -150,23 +150,9 @@ r"https://inv.odyssey346.dev/"
 
 waapis = [
   r"https://ludicrous-wonderful-temple.glitch.me/",   
-  r"https://yt.drgnz.club",   
-  r"https://invidious.privacyredirect.com",   
-  r"https://invidious.jing.rocks",   
-  r"https://iv.datura.network",   
-  r"https://invidious.private.coffee",   
-  r"https://invidious.materialio.us",   
-  r"https://invidious.fdn.fr",   
-  r"https://vid.puffyan.us",   
-  r"https://iteroni.com",   
-  r"https://invidious.private.coffee",   
-  r"https://youtube.privacyplz.org",   
-  r"https://invidious.fdn.fr",   
-  r"https://youtube.mosesmang.com",   
-  r"https://inv.nadeko.net",   
-  r"https://invidious.nerdvpn.de",   
-  r"https://iv.datura.network",   
-  r"https://invidious.perennialte.ch"
+  r"free-sudden-kiss.glitch.me/",   
+  r"https://wakame02m.glitch.me/",   
+  r"natural-voltaic-titanium.glitch.me/"
 ];
 
 apichannels = []
@@ -277,36 +263,11 @@ def get_info(request):
     
 def get_data(videoid):
     global logs
-    t = json.loads(apirequest_video(r"api/v1/videos/" + urllib.parse.quote(videoid)))
-
-    # 関連動画を解析してリストにする
-    related_videos = [
-        {
-            "id": i["videoId"],
-            "title": i["title"],
-            "authorId": i["authorId"],
-            "author": i["author"],
-            "viewCount": i["viewCount"]  # 再生回数を追加（デフォルトは0）
-        }
-        for i in t["recommendedVideos"]
-    ]
-    return (
-        related_videos,
-        list(reversed([i["url"] for i in t["formatStreams"]]))[:2],  # 逆順で2つのストリームURLを取得
-        t["descriptionHtml"].replace("\n", "<br>"),
-        t["title"],
-        t["authorId"],
-        t["author"],
-        t["authorThumbnails"][-1]["url"],
-        t["viewCount"] 
-    )    
+    t = json.loads(apirequest(r"api/v1/videos/"+ urllib.parse.quote(videoid)))
+    return [{"id":i["videoId"],"title":i["title"],"authorId":i["authorId"],"author":i["author"]} for i in t["recommendedVideos"]],list(reversed([i["url"] for i in t["formatStreams"]]))[:2],t["descriptionHtml"].replace("\n","<br>"),t["title"],t["authorId"],t["author"],t["authorThumbnails"][-1]["url"]
     
 def getting_data(videoid):
-    url = f"https://ludicrous-wonderful-temple.glitch.me/api/login/{urllib.parse.quote(videoid)}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        t = response.json()
-        print(t)
+        t = json.loads(apirequest(r"api/login/"+ urllib.parse.quote(videoid)))
         recommended_videos = [{
             "id": t["videoId"],
             "title": t["videoTitle"],
@@ -321,6 +282,28 @@ def getting_data(videoid):
         author = t["channelName"]
         author_icon = t["channelImage"] 
         return recommended_videos, stream_url, description, title, authorId, author, author_icon
+      
+def waapirequest(url):
+    global waapis
+    global max_time
+    starttime = time.time()
+    for api in apis:
+        if  time.time() - starttime >= max_time -1:
+            break
+        try:
+            res = requests.get(api+url,timeout=max_api_wait_time)
+            if res.status_code == 200 and is_json(res.text):
+                return res.text
+            else:
+                print(f"エラー:{api}")
+                apis.append(api)
+                apis.remove(api)
+        except:
+            print(f"タイムアウト:{api}")
+            apis.append(api)
+            apis.remove(api)
+    raise APItimeoutError("APIがタイムアウトしました")
+    
   
 def get_search(q,page):
     global logs
