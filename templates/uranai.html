@@ -9,7 +9,6 @@
             font-family: "Courier New", Courier, monospace;
             background-color: #2d2d2d;
             color: #e0e0e0;
-            text-align: center;
             margin: 0;
             padding: 0;
         }
@@ -22,6 +21,8 @@
             width: 80%;
             max-width: 500px;
             box-shadow: 0px 0px 20px 5px rgba(255, 0, 0, 0.5);
+            text-align: center;
+            position: relative; /* container内での配置のため */
         }
 
         h1 {
@@ -94,7 +95,7 @@
             border-radius: 50%;
             border: 3px solid #ff4500;
             position: absolute;
-            right: 0; /* 右寄せ */
+            right: 0; /* 右端に配置 */
             display: none; /* 最初は非表示 */
         }
 
