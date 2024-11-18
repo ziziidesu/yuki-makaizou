@@ -262,33 +262,32 @@ def get_data(videoid):
 def getting_data(videoid):
     urls = [
         f"https://ludicrous-wonderful-temple.glitch.me/api/login/{urllib.parse.quote(videoid)}",
-        f"https://free-sudden-kiss.glitch.me/api/login/{urllib.parse.quote(videoid)}",  # 2番目のAPI URL
-        f"https://wakame02m.glitch.me/api/login/{urllib.parse.quote(videoid)}"  # 3番目のAPI URL
+        f"https://free-sudden-kiss.glitch.me/api/login/{urllib.parse.quote(videoid)}",
+        f"https://wakame02m.glitch.me/api/login/{urllib.parse.quote(videoid)}",
+        f"https://natural-voltaic-titanium.glitch.me/api/login/{urllib.parse.quote(videoid)}"
     ]
     
     for url in urls:
-        try:
-            response = requests.get(url)
-            response.raise_for_status() 
+        response = requests.get(url)
+        if response.status_code == 200:
             t = response.json()
+
             recommended_videos = [{
-                "id": t["videoId"],
-                "title": t["videoTitle"],
-                "authorId": t["channelId"],
-                "author": t["channelName"],
-                "viewCountText": f"{t['videoViews']} views"
-            }]
+                "id": i["videoId"],
+                "title": i["videoTitle"],
+                "authorId": i["channelId"],
+                "author": i["channelName"]
+            } for i in t.get("recommendedVideos", [])]
+
+            stream_urls = list(reversed([i["url"] for i in t.get("formatStreams", [])]))[:2]
+            description = t.get("videoDes", "").replace("\n", "<br>")
+            title = t.get("videoTitle", "")
+            authorId = t.get("channelId", "")
+            author = t.get("channelName", "")
+            author_icon = t.get("channelImage", "")
             
-            stream_url = t["stream_url"]
-            description = t["videoDes"].replace("\n", "<br>")
-            title = t["videoTitle"]
-            authorId = t["channelId"]
-            author = t["channelName"]
-            author_icon = t["channelImage"]
-            
-            return recommended_videos, stream_url, description, title, authorId, author, author_icon
-      
-  
+            return recommended_videos, stream_urls, description, title, authorId, author, author_icon
+
 def get_search(q,page):
     global logs
     t = json.loads(apirequest(fr"api/v1/search?q={urllib.parse.quote(q)}&page={page}&hl=jp"))
