@@ -185,17 +185,16 @@
             const randomIndex = Math.floor(Math.random() * fortunes.length);
             const selectedFortune = fortunes[randomIndex];
             
-            // 結果とキャラのセリフを表示
             document.getElementById('fortune-result').textContent = selectedFortune.text;
             const speechBubble = document.getElementById('speech-bubble');
             speechBubble.textContent = selectedFortune.speech[Math.floor(Math.random() * selectedFortune.speech.length)];
 
-            // キャラクター画像と吹き出しを表示
+
             const characterImg = document.getElementById('character-img');
             const bubbleContainer = document.getElementById('character-container');
-            characterImg.style.display = "block"; // キャラクター画像を表示
-            bubbleContainer.style.display = "inline-block"; // 吹き出しを表示
-            speechBubble.style.display = "block"; // 吹き出しを表示
+            characterImg.style.display = "block";
+            bubbleContainer.style.display = "inline-block"; 
+            speechBubble.style.display = "block";
         }
     </script>
 
