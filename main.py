@@ -444,7 +444,6 @@ def thumbnail(v: str):
 def home():
     global url
     url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
-    
 
 @app.get("/app", response_class=HTMLResponse)
 def home(request: Request):
@@ -453,6 +452,10 @@ def home(request: Request):
 @app.get("/snowball", response_class=HTMLResponse)
 def home(request: Request):
     return template("snowball.html", {"request": request})
+  
+@app.get("/2048", response_class=HTMLResponse)
+def home(request: Request):
+    return template("2048.html", {"request": request})
   
 @app.get("/heddohon", response_class=HTMLResponse)
 def home(request: Request):
