@@ -286,8 +286,10 @@ def getting_data(videoid):
             authorId = t["channelId"]
             author = t["channelName"]
             author_icon = t["channelImage"]
+            highstreamUrl = t["highstreamUrl"]
+            audioUrl = t["audioUrl"]
             
-            return recommended_videos, stream_url, description, title, authorId, author, author_icon
+            return recommended_videos, stream_url, description, title, authorId, author, author_icon, highstreamUrl, audioUrl
 
 def get_search(q,page):
     global logs
@@ -398,6 +400,25 @@ def video(v: str, request: Request):
         "authoricon": t[6],
         "author": t[5],
         "streamUrl": t[1],
+    })
+
+@app.get('/www', response_class=HTMLResponse)
+def video(v: str, request: Request):
+    videoid = v
+    t = getting_data(videoid)
+    print(t)
+    print(t[7])
+    return template('watchhigh.html', {
+        "request": request,
+        "videoid": videoid,
+        "res": t[0],
+        "videourls": t[7],
+        "description": t[2],
+        "videotitle": t[3],
+        "authorid": t[4],
+        "authoricon": t[6],
+        "author": t[5],
+        "audioUrl": t[8],
     })
 
 @app.get("/search", response_class=HTMLResponse)
