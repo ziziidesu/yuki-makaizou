@@ -134,19 +134,40 @@ r"https://invidious.sethforprivacy.com/",
 r"https://invidious.stemy.me/",
 r"https://betamax.cybre.club/",
 r"https://invidious.com/",
-r"https://invidious.snopyta.org",
-r"https://yewtu.be",
-r"https://invidious.kavin.rocks",
-r"https://vid.puffyan.us",
-r"https://inv.riverside.rocks",
+r"https://invidious.snopyta.org/",
+r"https://yewtu.be/",
+r"https://invidious.kavin.rocks/",
+r"https://vid.puffyan.us/",
+r"https://inv.riverside.rocks/",
 r"https://invidious.not.futbol/",
-r"https://youtube.076.ne.jp",
+r"https://youtube.076.ne.jp/",
 r"https://yt.artemislena.eu",
-r"https://invidious.esmailelbob.xyz",
-r"https://invidious.projectsegfau.lt",
+r"https://invidious.esmailelbob.xyz/",
+r"https://invidious.projectsegfau.lt/",
 r"https://invidious.dhusch.de/",
 r"https://inv.odyssey346.dev/"
 ]
+
+waapis = [
+  r"https://ludicrous-wonderful-temple.glitch.me/",   
+  r"https://yt.drgnz.club",   
+  r"https://invidious.privacyredirect.com",   
+  r"https://invidious.jing.rocks",   
+  r"https://iv.datura.network",   
+  r"https://invidious.private.coffee",   
+  r"https://invidious.materialio.us",   
+  r"https://invidious.fdn.fr",   
+  r"https://vid.puffyan.us",   
+  r"https://iteroni.com",   
+  r"https://invidious.private.coffee",   
+  r"https://youtube.privacyplz.org",   
+  r"https://invidious.fdn.fr",   
+  r"https://youtube.mosesmang.com",   
+  r"https://inv.nadeko.net",   
+  r"https://invidious.nerdvpn.de",   
+  r"https://iv.datura.network",   
+  r"https://invidious.perennialte.ch"
+];
 
 apichannels = []
 apicomments = []
@@ -256,16 +277,29 @@ def get_info(request):
     
 def get_data(videoid):
     global logs
-    headers = {
-        "Cache-Control": "no-cache"
-    }
-    response = videoapirequest(r"api/v1/videos/" + urllib.parse.quote(videoid), headers=headers)
-    t = json.loads(response)
-    return [
-        {"id": i["videoId"], "title": i["title"], "authorId": i["authorId"], 
-         "author": i["author"], "viewCountText": i["viewCountText"]} 
+    t = json.loads(apirequest_video(r"api/v1/videos/" + urllib.parse.quote(videoid)))
+
+    # 関連動画を解析してリストにする
+    related_videos = [
+        {
+            "id": i["videoId"],
+            "title": i["title"],
+            "authorId": i["authorId"],
+            "author": i["author"],
+            "viewCount": i["viewCount"]  # 再生回数を追加（デフォルトは0）
+        }
         for i in t["recommendedVideos"]
-    ], list(reversed([i["url"] for i in t["formatStreams"]]))[:2], t["descriptionHtml"].replace("\n", "<br>"), t["title"], t["authorId"], t["author"], t["authorThumbnails"][-1]["url"]
+    ]
+    return (
+        related_videos,
+        list(reversed([i["url"] for i in t["formatStreams"]]))[:2],  # 逆順で2つのストリームURLを取得
+        t["descriptionHtml"].replace("\n", "<br>"),
+        t["title"],
+        t["authorId"],
+        t["author"],
+        t["authorThumbnails"][-1]["url"],
+        t["viewCount"] 
+    )    
     
 def getting_data(videoid):
     url = f"https://ludicrous-wonderful-temple.glitch.me/api/login/{urllib.parse.quote(videoid)}"
