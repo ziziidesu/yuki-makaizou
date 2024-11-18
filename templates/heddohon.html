@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ヘッドホンの選び方</title>
     <link rel="stylesheet" href="/css/heddohon.css" />
-    <script src="/js/heddohon.js"></script>
+    <script src="/static/heddohon.js"></script>
   </head>
   <body>
     <div id="loader">🎧</div>
@@ -45,11 +45,11 @@
             </p>
           </div></a
         >
-        <a href="/android"
+        <a href="/tool"
           ><div class="feature">
-            <h3>📱 Android</h3>
+            <h3>🧰 ツール</h3>
             <p>
-              あなたの携帯電話は、いつでも使用可能です！ただし、それは使いやすいことを意味しません😣
+              あなたのためのツール。より良い生活を手助けします！
             </p>
           </div></a
         >
@@ -79,18 +79,6 @@
         expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
         document.cookie =
           name + "=" + value + ";expires=" + expires.toUTCString() + ";path=/";
-      }
-
-      function getCookie(name) {
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(";");
-        for (let i = 0; i < ca.length; i++) {
-          let c = ca[i].trim();
-          if (c.indexOf(nameEQ) === 0) {
-            return c.substring(nameEQ.length, c.length);
-          }
-        }
-        return null;
       }
     </script>
   </body>

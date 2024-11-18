@@ -344,7 +344,7 @@ from typing import Union
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
 app.mount("/css", StaticFiles(directory="./css"), name="static")
-app.mount("/js", StaticFiles(directory="./js"), name="javascript")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 from fastapi.templating import Jinja2Templates
@@ -460,6 +460,10 @@ def home(request: Request):
 @app.get("/heddohon", response_class=HTMLResponse)
 def home(request: Request):
     return template("more.html", {"request": request})
+  
+@app.get("/tool", response_class=HTMLResponse)
+def home(request: Request):
+    return template("tool.html", {"request": request})
   
 @app.get("/drive", response_class=HTMLResponse)
 def home(request: Request):
