@@ -9,19 +9,6 @@ window.onload = function () {
   }
 };
 
-const bgmButton = document.getElementById("bgm-button");
-const bgmAudio = document.getElementById("bgm-audio");
-
-bgmButton.addEventListener("click", () => {
-  if (bgmAudio.paused) {
-    bgmAudio.play();
-    bgmButton.textContent = "⏸️ bgmを停止する ⏸️";
-  } else {
-    bgmAudio.pause();
-    bgmButton.textContent = "🎵 bgmを再生する 🎵";
-  }
-});
-
 function getCookie(name) {
   const nameEQ = name + "=";
   const ca = document.cookie.split(";");

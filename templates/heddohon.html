@@ -80,6 +80,19 @@
         document.cookie =
           name + "=" + value + ";expires=" + expires.toUTCString() + ";path=/";
       }
+      
+      const bgmButton = document.getElementById("bgm-button");
+const bgmAudio = document.getElementById("bgm-audio");
+
+bgmButton.addEventListener("click", () => {
+  if (bgmAudio.paused) {
+    bgmAudio.play();
+    bgmButton.textContent = "⏸️ bgmを停止する ⏸️";
+  } else {
+    bgmAudio.pause();
+    bgmButton.textContent = "🎵 bgmを再生する 🎵";
+  }
+});
     </script>
   </body>
 </html>
