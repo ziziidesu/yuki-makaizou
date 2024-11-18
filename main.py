@@ -271,22 +271,23 @@ def getting_data(videoid):
         response = requests.get(url)
         if response.status_code == 200:
             t = response.json()
-
-            recommended_videos = [{
-                "id": i["videoId"],
-                "title": i["videoTitle"],
-                "authorId": i["channelId"],
-                "author": i["channelName"]
-            } for i in t.get("recommendedVideos", [])]
-
-            stream_urls = list(reversed([i["url"] for i in t.get("formatStreams", [])]))[:2]
-            description = t.get("videoDes", "").replace("\n", "<br>")
-            title = t.get("videoTitle", "")
-            authorId = t.get("channelId", "")
-            author = t.get("channelName", "")
-            author_icon = t.get("channelImage", "")
             
-            return recommended_videos, stream_urls, description, title, authorId, author, author_icon
+            recommended_videos = [{
+               "id": t["videoId"],
+               "title": t["videoTitle"],
+               "authorId": t["channelId"],
+               "author": t["channelName"],
+               "viewCountText": f"{t['videoViews']} views"
+           }]
+            
+            stream_url = t["stream_url"]
+            description = t["videoDes"].replace("\n", "<br>")
+            title = t["videoTitle"]
+            authorId = t["channelId"]
+            author = t["channelName"]
+            author_icon = t["channelImage"]
+            
+            return recommended_videos, stream_url, description, title, authorId, author, author_icon
 
 def get_search(q,page):
     global logs
