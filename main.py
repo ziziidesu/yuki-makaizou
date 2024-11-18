@@ -477,6 +477,10 @@ def home(request: Request):
 def home(request: Request):
     return template("drive.html", {"request": request})
   
+@app.get("/tubeurl", response_class=HTMLResponse)
+def home(request: Request):
+    return template("tubeurl.html", {"request": request})
+  
 @app.get("/fileview", response_class=HTMLResponse)
 def home(request: Request):
     return template("fileview.html", {"request": request})
