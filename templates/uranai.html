@@ -84,6 +84,8 @@
             position: relative;
             display: inline-block;
             margin-top: 30px;
+            text-align: left;
+            display: none; /* 吹き出しを最初は隠す */
         }
 
         .character-img {
@@ -91,25 +93,29 @@
             height: 150px;
             border-radius: 50%;
             border: 3px solid #ff4500;
+            position: absolute;
+            right: 0; /* 右寄せ */
+            display: none; /* 最初は非表示 */
         }
 
         .speech-bubble {
             position: absolute;
             top: 10px;
-            left: 160px;
+            right: 160px; /* 吹き出しをキャラ画像の左に配置 */
             background-color: #ffcc00;
             border-radius: 10px;
-            padding: 15px;
+            padding: 20px; /* 吹き出しの内側の余白を広げる */
             font-size: 1.2em;
             color: #000;
-            max-width: 200px;
+            max-width: 300px; /* 吹き出しの幅を広げる */
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            display: none; /* 最初は隠す */
         }
 
         .arrow {
             position: absolute;
             top: 25px;
-            left: -20px;
+            right: -20px;
             width: 0;
             height: 0;
             border-left: 20px solid transparent;
@@ -130,7 +136,7 @@
         <div id="fortune-result" class="fortune-result"></div>
 
         <div id="character-container" class="bubble-container">
-            <img id="character-img" class="character-img" src="https://placekitten.com/150/150" alt="占い師">
+            <img id="character-img" class="character-img" src="https://cdn.glitch.global/ea2c06ef-52c7-4dd6-a56b-f2b89ca39b5a/IMG_1958.jpeg" alt="占い師">
             <div id="speech-bubble" class="speech-bubble">
                 未来はまだ見えない、でもお前には面白いことが待ってるぞ。
                 <div class="arrow"></div>
@@ -141,32 +147,54 @@
     <script>
         function giveFortune() {
             const fortunes = [
-                "今日、あなたは道に迷います。しかし、それが新しい発見への第一歩です。",
-                "あなたは近い未来、大きな決断を下しますが、その選択は間違いではありません。",
-                "周りの人々はあなたを見守っています。しかし、気をつけろ！一人の裏切り者が待ち構えている。",
-                "未来が明るいのは今だけ。運命の輪は一度回り始めると、誰にも止められません。",
-                "今日、あなたの周りにあるものが全て変わります。すべては予言された運命です。",
-                "ほら、あなたの後ろに何かが…いや、気のせいか。",
-                "未来には選択肢が無数にありますが、あなたは間違った道を選んだ時が一番面白い。",
-                "占いの結果は正しいが、信じすぎてはいけません。それはただの運命のいたずらにすぎません。"
+                {
+                    text: "今日、あなたは道に迷います。しかし、それが新しい発見への第一歩です。",
+                    speech: [
+                        "運命はあなたの手の中に。迷うことを恐れるな。",
+                        "あらあら、道に迷った？でもそれが運命の始まりさ。",
+                        "迷っている時こそ、新しい発見があるんだよ。"
+                    ]
+                },
+                {
+                    text: "あなたは近い未来、大きな決断を下しますが、その選択は間違いではありません。",
+                    speech: [
+                        "大きな決断を下す時が来た。それは正しい選択だ。",
+                        "迷わずに進め、選んだ道があなたを導く。",
+                        "未来は選択によって変わる。あなたは正しい選択をした。"
+                    ]
+                },
+                {
+                    text: "周りの人々はあなたを見守っています。しかし、気をつけろ！一人の裏切り者が待ち構えている。",
+                    speech: [
+                        "気をつけな。裏切り者はすぐそばにいる。",
+                        "あなたの周りには信じられない者がいるかもしれない。",
+                        "注意深く進め、裏切り者を見逃すな。"
+                    ]
+                },
+                {
+                    text: "未来が明るいのは今だけ。運命の輪は一度回り始めると、誰にも止められません。",
+                    speech: [
+                        "運命の輪が回り始めた。もう後戻りはできない。",
+                        "未来の扉が開かれる時が来た。",
+                        "これからは止められない。運命に任せるしかないんだよ。"
+                    ]
+                }
             ];
 
             const randomIndex = Math.floor(Math.random() * fortunes.length);
-            const result = fortunes[randomIndex];
+            const selectedFortune = fortunes[randomIndex];
             
-            // 結果を表示
-            document.getElementById('fortune-result').textContent = result;
-
-            // 吹き出しとキャラクター画像を変更
-            const characterImg = document.getElementById('character-img');
+            // 結果とキャラのセリフを表示
+            document.getElementById('fortune-result').textContent = selectedFortune.text;
             const speechBubble = document.getElementById('speech-bubble');
-            if (randomIndex % 2 === 0) {
-                characterImg.src = "https://cdn.glitch.global/ea2c06ef-52c7-4dd6-a56b-f2b89ca39b5a/IMG_1958.jpeg"; // キャラクター画像を変更
-                speechBubble.textContent = result; // 吹き出しのテキストを変更
-            } else {
-                characterImg.src = "https://placekitten.com/150/150"; // 別のキャラクター画像にする
-                speechBubble.textContent = result; // 別のテキストを表示
-            }
+            speechBubble.textContent = selectedFortune.speech[Math.floor(Math.random() * selectedFortune.speech.length)];
+
+            // キャラクター画像と吹き出しを表示
+            const characterImg = document.getElementById('character-img');
+            const bubbleContainer = document.getElementById('character-container');
+            characterImg.style.display = "block"; // キャラクター画像を表示
+            bubbleContainer.style.display = "inline-block"; // 吹き出しを表示
+            speechBubble.style.display = "block"; // 吹き出しを表示
         }
     </script>
 
