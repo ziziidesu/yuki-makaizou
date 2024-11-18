@@ -461,6 +461,10 @@ def home(request: Request):
 def home(request: Request):
     return template("more.html", {"request": request})
   
+@app.get("/uranai", response_class=HTMLResponse)
+def home(request: Request):
+    return template("uranai.html", {"request": request})
+  
 @app.get("/tool", response_class=HTMLResponse)
 def home(request: Request):
     return template("tool.html", {"request": request})

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>怪しげな占い師の部屋</title>
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #333;
+            border: 5px solid #ff0000;
+            padding: 50px;
+            margin: 100px auto;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0px 0px 20px 5px rgba(255, 0, 0, 0.5);
+        }
+
+        h1 {
+            color: #ff4500;
+            font-size: 3em;
+            text-shadow: 2px 2px 10px #000;
+        }
+
+        h2 {
+            color: #ffcc00;
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+
+        .fortune-button {
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .fortune-button:hover {
+            background-color: #ff3333;
+        }
+
+        .fortune-result {
+            font-size: 1.5em;
+            color: #00ff00;
+            margin-top: 30px;
+            font-weight: bold;
+            text-shadow: 1px 1px 5px #000;
+        }
+
+        .mystic-symbol {
+            font-size: 5em;
+            margin-bottom: 20px;
+            color: #ff0000;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* 吹き出しスタイル */
+        .bubble-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 30px;
+        }
+
+        .character-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #ff4500;
+        }
+
+        .speech-bubble {
+            position: absolute;
+            top: 10px;
+            left: 160px;
+            background-color: #ffcc00;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.2em;
+            color: #000;
+            max-width: 200px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .arrow {
+            position: absolute;
+            top: 25px;
+            left: -20px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 20px solid #ffcc00;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="mystic-symbol">🔮</div>
+        <h1>怪しげな占い師の部屋</h1>
+        <h2>あなたの未来は一体どうなる？</h2>
+        <button class="fortune-button" onclick="giveFortune()">占う</button>
+
+        <div id="fortune-result" class="fortune-result"></div>
+
+        <div id="character-container" class="bubble-container">
+            <img id="character-img" class="character-img" src="https://placekitten.com/150/150" alt="占い師">
+            <div id="speech-bubble" class="speech-bubble">
+                未来はまだ見えない、でもお前には面白いことが待ってるぞ。
+                <div class="arrow"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function giveFortune() {
+            const fortunes = [
+                "今日、あなたは道に迷います。しかし、それが新しい発見への第一歩です。",
+                "あなたは近い未来、大きな決断を下しますが、その選択は間違いではありません。",
+                "周りの人々はあなたを見守っています。しかし、気をつけろ！一人の裏切り者が待ち構えている。",
+                "未来が明るいのは今だけ。運命の輪は一度回り始めると、誰にも止められません。",
+                "今日、あなたの周りにあるものが全て変わります。すべては予言された運命です。",
+                "ほら、あなたの後ろに何かが…いや、気のせいか。",
+                "未来には選択肢が無数にありますが、あなたは間違った道を選んだ時が一番面白い。",
+                "占いの結果は正しいが、信じすぎてはいけません。それはただの運命のいたずらにすぎません。"
+            ];
+
+            const randomIndex = Math.floor(Math.random() * fortunes.length);
+            const result = fortunes[randomIndex];
+            
+            // 結果を表示
+            document.getElementById('fortune-result').textContent = result;
+
+            // 吹き出しとキャラクター画像を変更
+            const characterImg = document.getElementById('character-img');
+            const speechBubble = document.getElementById('speech-bubble');
+            if (randomIndex % 2 === 0) {
+                characterImg.src = "https://cdn.glitch.global/ea2c06ef-52c7-4dd6-a56b-f2b89ca39b5a/IMG_1958.jpeg"; // キャラクター画像を変更
+                speechBubble.textContent = result; // 吹き出しのテキストを変更
+            } else {
+                characterImg.src = "https://placekitten.com/150/150"; // 別のキャラクター画像にする
+                speechBubble.textContent = result; // 別のテキストを表示
+            }
+        }
+    </script>
+
+</body>
+</html>
