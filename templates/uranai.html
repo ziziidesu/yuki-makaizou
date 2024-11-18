@@ -135,67 +135,85 @@
         <button class="fortune-button" onclick="giveFortune()">占う</button>
 
         <div id="fortune-result" class="fortune-result"></div>
-
-        <div id="character-container" class="bubble-container">
-            <img id="character-img" class="character-img" src="https://cdn.glitch.global/ea2c06ef-52c7-4dd6-a56b-f2b89ca39b5a/IMG_1958.jpeg" alt="占い師">
             <div id="speech-bubble" class="speech-bubble">
                 未来はまだ見えない、でもお前には面白いことが待ってるぞ。
                 <div class="arrow"></div>
             </div>
         </div>
-    </div>
-
+<div class="character" id="character"></div>
     <script>
-        function giveFortune() {
-            const fortunes = [
-                {
-                    text: "今日、あなたは道に迷います。しかし、それが新しい発見への第一歩です。",
-                    speech: [
-                        "運命はあなたの手の中に。迷うことを恐れるな。",
-                        "あらあら、道に迷った？でもそれが運命の始まりさ。",
-                        "迷っている時こそ、新しい発見があるんだよ。"
-                    ]
-                },
-                {
-                    text: "あなたは近い未来、大きな決断を下しますが、その選択は間違いではありません。",
-                    speech: [
-                        "大きな決断を下す時が来た。それは正しい選択だ。",
-                        "迷わずに進め、選んだ道があなたを導く。",
-                        "未来は選択によって変わる。あなたは正しい選択をした。"
-                    ]
-                },
-                {
-                    text: "周りの人々はあなたを見守っています。しかし、気をつけろ！一人の裏切り者が待ち構えている。",
-                    speech: [
-                        "気をつけな。裏切り者はすぐそばにいる。",
-                        "あなたの周りには信じられない者がいるかもしれない。",
-                        "注意深く進め、裏切り者を見逃すな。"
-                    ]
-                },
-                {
-                    text: "未来が明るいのは今だけ。運命の輪は一度回り始めると、誰にも止められません。",
-                    speech: [
-                        "運命の輪が回り始めた。もう後戻りはできない。",
-                        "未来の扉が開かれる時が来た。",
-                        "これからは止められない。運命に任せるしかないんだよ。"
-                    ]
-                }
-            ];
-
-            const randomIndex = Math.floor(Math.random() * fortunes.length);
-            const selectedFortune = fortunes[randomIndex];
-            
-            document.getElementById('fortune-result').textContent = selectedFortune.text;
-            const speechBubble = document.getElementById('speech-bubble');
-            speechBubble.textContent = selectedFortune.speech[Math.floor(Math.random() * selectedFortune.speech.length)];
-
-
-            const characterImg = document.getElementById('character-img');
-            const bubbleContainer = document.getElementById('character-container');
-            characterImg.style.display = "block";
-            bubbleContainer.style.display = "inline-block"; 
-            speechBubble.style.display = "block";
+function giveFortune() {
+    const fortunes = [
+        {
+            text: "今日、あなたは道に迷います。しかし、それが新しい発見への第一歩です。",
+            speech: [
+                "運命はあなたの手の中に。迷うことを恐れるな。",
+                "あらあら、道に迷った？でもそれが運命の始まりさ。",
+                "迷っている時こそ、新しい発見があるんだよ。"
+            ]
+        },
+        {
+            text: "あなたは近い未来、大きな決断を下しますが、その選択は間違いではありません。",
+            speech: [
+                "大きな決断を下す時が来た。それは正しい選択だ。",
+                "迷わずに進め、選んだ道があなたを導く。",
+                "未来は選択によって変わる。あなたは正しい選択をした。"
+            ]
+        },
+        {
+            text: "周りの人々はあなたを見守っています。しかし、気をつけろ！一人の裏切り者が待ち構えている。",
+            speech: [
+                "気をつけな。裏切り者はすぐそばにいる。",
+                "あなたの周りには信じられない者がいるかもしれない。",
+                "注意深く進め、裏切り者を見逃すな。"
+            ]
+        },
+        {
+            text: "未来が明るいのは今だけ。運命の輪は一度回り始めると、誰にも止められません。",
+            speech: [
+                "運命の輪が回り始めた。もう後戻りはできない。",
+                "未来の扉が開かれる時が来た。",
+                "これからは止められない。運命に任せるしかないんだよ。"
+            ]
         }
+    ];
+
+    const randomIndex = Math.floor(Math.random() * fortunes.length);
+    const selectedFortune = fortunes[randomIndex];
+    
+    document.getElementById('fortune-result').textContent = selectedFortune.text;
+    const randomSpeech = selectedFortune.speech[Math.floor(Math.random() * selectedFortune.speech.length)];
+    kasukumahatugen(randomSpeech);
+}
+
+function kasukumahatugen(speech) {
+    const characterPopup = document.createElement('div');
+    characterPopup.style.position = 'fixed';
+    characterPopup.style.bottom = '20px';
+    characterPopup.style.right = '20px';
+    characterPopup.style.backgroundColor = 'lightgray';
+    characterPopup.style.padding = '10px';
+    characterPopup.style.borderRadius = '10px';
+    characterPopup.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.1)';
+    characterPopup.style.display = 'flex';
+    characterPopup.style.alignItems = 'center';
+
+
+    const img = document.createElement('img');
+    img.src = 'https://cdn.glitch.global/ea2c06ef-52c7-4dd6-a56b-f2b89ca39b5a/IMG_1958.jpeg';
+    img.alt = '占いキャラクター';
+    img.style.width = '50px'; 
+    img.style.marginRight = '10px';
+
+    const text = document.createElement('span');
+    text.textContent = speech;
+
+    characterPopup.appendChild(img);
+    characterPopup.appendChild(text);
+
+    document.body.appendChild(characterPopup);
+}
+
     </script>
 
 </body>
