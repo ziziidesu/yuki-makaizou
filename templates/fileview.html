@@ -1,79 +1,95 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ファイルビュー</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ファイルビューア</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin: 20px;
-      }
-      #fileInput {
-        margin: 20px 0;
-      }
-      #filePreview {
-        margin-top: 20px;
-        max-width: 100%;
-        max-height: 500px;
-      }
-      #pdfViewer {
-        width: 100%;
-        height: 500px;
-      }
-      iframe {
-        width: 100%;
-        height: 500px;
-        border: none;
-      }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #fileInput {
+            margin: 20px 0;
+        }
+        #filePreview {
+            margin-top: 20px;
+            max-width: 100%;
+            max-height: 500px;
+        }
+        #pdfViewer {
+            width: 100%;
+            height: 500px;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+        video {
+            width: 100%;
+            max-height: 500px;
+        }
     </style>
-  </head>
-  <body>
-    <h1>ファイルビューア</h1>
-
-    <input type="file" id="fileInput" accept="image/*, .pdf, .html" />
-
-    <div id="filePreview"></div>
+</head>
+<body>
+<!-- ファイル選択 -->
+    <input type="file" id="fileInput" accept="image/*, .pdf, .html, video/*" />
+    
+    <!-- プレビュー表示エリア -->
+    <div id="filePreview">
+        <!-- 画像、PDF、HTML、動画をここに表示 -->
+    </div>
 
     <script>
-      document
-        .getElementById("fileInput")
-        .addEventListener("change", function (event) {
-          const file = event.target.files[0];
-          const filePreview = document.getElementById("filePreview");
-          filePreview.innerHTML = "";
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const filePreview = document.getElementById('filePreview');
+            filePreview.innerHTML = ''; // 以前のプレビューをクリア
 
-          if (!file) {
-            return;
-          }
+            if (!file) {
+                return;
+            }
 
-          const reader = new FileReader();
+            const reader = new FileReader();
 
-          if (file.type.startsWith("image/")) {
-            reader.onload = function (e) {
-              const img = document.createElement("img");
-              img.src = e.target.result;
-              img.style.maxWidth = "100%";
-              img.style.maxHeight = "500px";
-              filePreview.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-          } else if (file.type === "application/pdf") {
-            const object = document.createElement("object");
-            object.data = URL.createObjectURL(file);
-            object.type = "application/pdf";
-            object.id = "pdfViewer";
-            filePreview.appendChild(object);
-          } else if (file.type === "text/html") {
-            const iframe = document.createElement("iframe");
-            const url = URL.createObjectURL(file);
-            iframe.src = url;
-            filePreview.appendChild(iframe);
-          } else {
-            alert("サポートされていないファイルタイプです");
-          }
+            // 画像ファイルの場合
+            if (file.type.startsWith('image/')) {
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '500px';
+                    filePreview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+            // PDFファイルの場合
+            else if (file.type === 'application/pdf') {
+                const object = document.createElement('object');
+                object.data = URL.createObjectURL(file);
+                object.type = 'application/pdf';
+                object.id = 'pdfViewer';
+                filePreview.appendChild(object);
+            }
+            // HTMLファイルの場合
+            else if (file.type === 'text/html') {
+                const iframe = document.createElement('iframe');
+                const url = URL.createObjectURL(file);
+                iframe.src = url;
+                filePreview.appendChild(iframe);
+            }
+            // 動画ファイルの場合
+            else if (file.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.controls = true;
+                video.src = URL.createObjectURL(file);
+                filePreview.appendChild(video);
+            } else {
+                alert('サポートされていないファイルタイプです');
+            }
         });
     </script>
-  </body>
+</body>
 </html>
