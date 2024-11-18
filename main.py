@@ -473,6 +473,14 @@ def home(request: Request):
 def home(request: Request):
     return template("drive.html", {"request": request})
   
+@app.get("/fileview", response_class=HTMLResponse)
+def home(request: Request):
+    return template("fileview.html", {"request": request})
+  
+@app.get("/sonota", response_class=HTMLResponse)
+def home(request: Request):
+    return template("sonota.html", {"request": request})
+  
 @app.get("/android", response_class=HTMLResponse)
 def home(request: Request):
     return template("android.html", {"request": request})
