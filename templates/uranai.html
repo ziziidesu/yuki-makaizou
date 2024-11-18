@@ -1,220 +1,227 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>怪しげな占い師の部屋</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>選択</title>
     <style>
-        body {
-            font-family: "Courier New", Courier, monospace;
-            background-color: #2d2d2d;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        font-family: "Courier New", Courier, monospace;
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+        margin: 0;
+        padding: 0;
+      }
 
-        .container {
-            background-color: #333;
-            border: 5px solid #ff0000;
-            padding: 50px;
-            margin: 100px auto;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0px 0px 20px 5px rgba(255, 0, 0, 0.5);
-            text-align: center;
-            position: relative; /* container内での配置のため */
-        }
+      .container {
+        background-color: #333;
+        border: 5px solid #ff0000;
+        padding: 50px;
+        margin: 100px auto;
+        width: 80%;
+        max-width: 500px;
+        box-shadow: 0px 0px 20px 5px rgba(255, 0, 0, 0.5);
+        text-align: center;
+        position: relative;
+      }
 
-        h1 {
-            color: #ff4500;
-            font-size: 3em;
-            text-shadow: 2px 2px 10px #000;
-        }
+      h1 {
+        color: #ff4500;
+        font-size: 3em;
+        text-shadow: 2px 2px 10px #000;
+      }
 
-        h2 {
-            color: #ffcc00;
-            font-size: 1.5em;
-            margin-top: 30px;
-        }
+      h2 {
+        color: #ffcc00;
+        font-size: 1.5em;
+        margin-top: 30px;
+      }
 
-        .fortune-button {
-            background-color: #ff6600;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
+      .fortune-button {
+        background-color: #ff6600;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2em;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        margin-top: 20px;
+      }
 
-        .fortune-button:hover {
-            background-color: #ff3333;
-        }
+      .fortune-button:hover {
+        background-color: #ff3333;
+      }
 
-        .fortune-result {
-            font-size: 1.5em;
-            color: #00ff00;
-            margin-top: 30px;
-            font-weight: bold;
-            text-shadow: 1px 1px 5px #000;
-        }
+      .fortune-result {
+        font-size: 1.5em;
+        color: #00ff00;
+        margin-top: 30px;
+        font-weight: bold;
+        text-shadow: 1px 1px 5px #000;
+      }
 
-        .mystic-symbol {
-            font-size: 5em;
-            margin-bottom: 20px;
-            color: #ff0000;
-            animation: pulse 1.5s infinite;
-        }
+      .mystic-symbol {
+        font-size: 5em;
+        margin-bottom: 20px;
+        color: #ff0000;
+        animation: pulse 1.5s infinite;
+      }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
         }
-
-        /* 吹き出しスタイル */
-        .bubble-container {
-            position: relative;
-            display: inline-block;
-            margin-top: 30px;
-            text-align: left;
-            display: none; /* 吹き出しを最初は隠す */
+        50% {
+          transform: scale(1.2);
         }
-
-        .character-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 3px solid #ff4500;
-            position: absolute;
-            right: 0; /* 右端に配置 */
-            display: none; /* 最初は非表示 */
+        100% {
+          transform: scale(1);
         }
+      }
 
-        .speech-bubble {
-            position: absolute;
-            top: 10px;
-            right: 160px; /* 吹き出しをキャラ画像の左に配置 */
-            background-color: #ffcc00;
-            border-radius: 10px;
-            padding: 20px; /* 吹き出しの内側の余白を広げる */
-            font-size: 1.2em;
-            color: #000;
-            max-width: 300px; /* 吹き出しの幅を広げる */
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-            display: none; /* 最初は隠す */
-        }
+      .bubble-container {
+        position: relative;
+        display: inline-block;
+        margin-top: 30px;
+        text-align: left;
+        display: none;
+      }
 
-        .arrow {
-            position: absolute;
-            top: 25px;
-            right: -20px;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 20px solid #ffcc00;
-        }
+      .character-img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 3px solid #ff4500;
+        position: absolute;
+        right: 0;
+        display: none;
+      }
 
+      .speech-bubble {
+        position: absolute;
+        top: 10px;
+        right: 160px;
+        background-color: #ffcc00;
+        border-radius: 10px;
+        padding: 20px;
+        font-size: 1.2em;
+        color: #000;
+        max-width: 300px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        display: none;
+      }
+
+      .arrow {
+        position: absolute;
+        top: 25px;
+        right: -20px;
+        width: 0;
+        height: 0;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-bottom: 20px solid #ffcc00;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="container">
-        <div class="mystic-symbol">🔮</div>
-        <h1>怪しげな占い師の部屋</h1>
-        <h2>あなたの未来は一体どうなる？</h2>
-        <button class="fortune-button" onclick="giveFortune()">占う</button>
+      <div class="mystic-symbol">🔮</div>
+      <h1>かすクマの館</h1>
+      <h2>見えます見えます。あなたの未来が...！</h2>
+      <button class="fortune-button" onclick="giveFortune()">占う</button>
 
-        <div id="fortune-result" class="fortune-result"></div>
-            <div id="speech-bubble" class="speech-bubble">
-                未来はまだ見えない、でもお前には面白いことが待ってるぞ。
-                <div class="arrow"></div>
-            </div>
-        </div>
-<div class="character" id="character"></div>
+      <div id="fortune-result" class="fortune-result"></div>
+      <div id="speech-bubble" class="speech-bubble">
+        未来はまだ見えない、でもお前には面白いことが待ってるぞ。
+        <div class="arrow"></div>
+      </div>
+    </div>
+    <div class="character" id="character"></div>
     <script>
-function giveFortune() {
-    const fortunes = [
-        {
+      function giveFortune() {
+        const fortunes = [
+          {
             text: "今日、あなたは道に迷います。しかし、それが新しい発見への第一歩です。",
             speech: [
-                "運命はあなたの手の中に。迷うことを恐れるな。",
-                "あらあら、道に迷った？でもそれが運命の始まりさ。",
-                "迷っている時こそ、新しい発見があるんだよ。"
-            ]
-        },
-        {
+              "運命はあなたの手の中に。迷うことを恐れるな。",
+              "あらあら、道に迷った？でもそれが運命の始まりさ。",
+              "迷っている時こそ、新しい発見があるんだよ。",
+            ],
+          },
+          {
             text: "あなたは近い未来、大きな決断を下しますが、その選択は間違いではありません。",
             speech: [
-                "大きな決断を下す時が来た。それは正しい選択だ。",
-                "迷わずに進め、選んだ道があなたを導く。",
-                "未来は選択によって変わる。あなたは正しい選択をした。"
-            ]
-        },
-        {
+              "大きな決断を下す時が来た。それは正しい選択だ。",
+              "迷わずに進め、選んだ道があなたを導く。",
+              "未来は選択によって変わる。あなたは正しい選択をした。",
+            ],
+          },
+          {
             text: "周りの人々はあなたを見守っています。しかし、気をつけろ！一人の裏切り者が待ち構えている。",
             speech: [
-                "気をつけな。裏切り者はすぐそばにいる。",
-                "あなたの周りには信じられない者がいるかもしれない。",
-                "注意深く進め、裏切り者を見逃すな。"
-            ]
-        },
-        {
+              "気をつけな。裏切り者はすぐそばにいる。",
+              "あなたの周りには信じられない者がいるかもしれない。",
+              "注意深く進め、裏切り者を見逃すな。",
+            ],
+          },
+          {
             text: "未来が明るいのは今だけ。運命の輪は一度回り始めると、誰にも止められません。",
             speech: [
-                "運命の輪が回り始めた。もう後戻りはできない。",
-                "未来の扉が開かれる時が来た。",
-                "これからは止められない。運命に任せるしかないんだよ。"
-            ]
+              "運命の輪が回り始めた。もう後戻りはできない。",
+              "未来の扉が開かれる時が来た。",
+              "これからは止められない。運命に任せるしかないんだよ。",
+            ],
+          },
+        ];
+
+        const randomIndex = Math.floor(Math.random() * fortunes.length);
+        const selectedFortune = fortunes[randomIndex];
+
+        document.getElementById("fortune-result").textContent =
+          selectedFortune.text;
+        const randomSpeech =
+          selectedFortune.speech[
+            Math.floor(Math.random() * selectedFortune.speech.length)
+          ];
+
+        showRandomCharacter(randomSpeech);
+      }
+
+      function showRandomCharacter(speech) {
+        const previousPopup = document.querySelector(".character-popup");
+        if (previousPopup) {
+          previousPopup.remove();
         }
-    ];
 
-    const randomIndex = Math.floor(Math.random() * fortunes.length);
-    const selectedFortune = fortunes[randomIndex];
-    
-    document.getElementById('fortune-result').textContent = selectedFortune.text;
-    const randomSpeech = selectedFortune.speech[Math.floor(Math.random() * selectedFortune.speech.length)];
-    kasukumahatugen(randomSpeech);
-}
+        const characterPopup = document.createElement("div");
+        characterPopup.classList.add("character-popup");
+        characterPopup.style.position = "fixed";
+        characterPopup.style.bottom = "20px";
+        characterPopup.style.right = "20px";
+        characterPopup.style.backgroundColor = "lightgray";
+        characterPopup.style.padding = "10px";
+        characterPopup.style.borderRadius = "10px";
+        characterPopup.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.1)";
+        characterPopup.style.display = "flex";
+        characterPopup.style.alignItems = "center";
 
-function kasukumahatugen(speech) {
-    const characterPopup = document.createElement('div');
-    characterPopup.style.position = 'fixed';
-    characterPopup.style.bottom = '20px';
-    characterPopup.style.right = '20px';
-    characterPopup.style.backgroundColor = 'lightgray';
-    characterPopup.style.padding = '10px';
-    characterPopup.style.borderRadius = '10px';
-    characterPopup.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.1)';
-    characterPopup.style.display = 'flex';
-    characterPopup.style.alignItems = 'center';
+        const img = document.createElement("img");
+        img.src =
+          "https://cdn.glitch.global/ea2c06ef-52c7-4dd6-a56b-f2b89ca39b5a/IMG_1958.jpeg";
+        img.alt = "占いキャラクター";
+        img.style.width = "50px";
+        img.style.marginRight = "10px";
 
+        const text = document.createElement("span");
+        text.textContent = speech;
+        text.style.color = "black";
 
-    const img = document.createElement('img');
-    img.src = 'https://cdn.glitch.global/ea2c06ef-52c7-4dd6-a56b-f2b89ca39b5a/IMG_1958.jpeg';
-    img.alt = '占いキャラクター';
-    img.style.width = '50px'; 
-    img.style.marginRight = '10px';
+        characterPopup.appendChild(img);
+        characterPopup.appendChild(text);
 
-    const text = document.createElement('span');
-    text.textContent = speech;
-
-    characterPopup.appendChild(img);
-    characterPopup.appendChild(text);
-
-    document.body.appendChild(characterPopup);
-}
-
+        document.body.appendChild(characterPopup);
+      }
     </script>
-
-</body>
+  </body>
 </html>
