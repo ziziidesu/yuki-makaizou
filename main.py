@@ -148,13 +148,6 @@ r"https://invidious.dhusch.de/",
 r"https://inv.odyssey346.dev/"
 ]
 
-waapis = [
-  r"https://ludicrous-wonderful-temple.glitch.me/",   
-  r"free-sudden-kiss.glitch.me/",   
-  r"https://wakame02m.glitch.me/",   
-  r"natural-voltaic-titanium.glitch.me/"
-];
-
 apichannels = []
 apicomments = []
 [[apichannels.append(i),apicomments.append(i)] for i in apis]
@@ -267,43 +260,34 @@ def get_data(videoid):
     return [{"id":i["videoId"],"title":i["title"],"authorId":i["authorId"],"author":i["author"]} for i in t["recommendedVideos"]],list(reversed([i["url"] for i in t["formatStreams"]]))[:2],t["descriptionHtml"].replace("\n","<br>"),t["title"],t["authorId"],t["author"],t["authorThumbnails"][-1]["url"]
     
 def getting_data(videoid):
-        t = json.loads(waapirequest(r"api/login/"+ urllib.parse.quote(videoid)))
-        recommended_videos = [{
-            "id": t["videoId"],
-            "title": t["videoTitle"],
-            "authorId": t["channelId"],
-            "author": t["channelName"],
-            "viewCountText": f"{t['videoViews']} views"
-        }]
-        stream_url = t["stream_url"]
-        description = t["videoDes"].replace("\n", "<br>")
-        title = t["videoTitle"]
-        authorId = t["channelId"]
-        author = t["channelName"]
-        author_icon = t["channelImage"] 
-        return recommended_videos, stream_url, description, title, authorId, author, author_icon
-      
-def waapirequest(url):
-    global waapis
-    global max_time
-    starttime = time.time()
-    for api in apis:
-        if  time.time() - starttime >= max_time -1:
-            break
-        try:
-            res = requests.get(api+url,timeout=max_api_wait_time)
-            if res.status_code == 200 and is_json(res.text):
-                return res.text
-            else:
-                print(f"エラー:{api}")
-                apis.append(api)
-                apis.remove(api)
-        except:
-            print(f"タイムアウト:{api}")
-            apis.append(api)
-            apis.remove(api)
-    raise APItimeoutError("APIがタイムアウトしました")
+    urls = [
+        f"https://ludicrous-wonderful-temple.glitch.me/api/login/{urllib.parse.quote(videoid)}",
+        f"https://free-sudden-kiss.glitch.me/api/login/{urllib.parse.quote(videoid)}",  # 2番目のAPI URL
+        f"https://wakame02m.glitch.me/api/login/{urllib.parse.quote(videoid)}"  # 3番目のAPI URL
+    ]
     
+    for url in urls:
+        try:
+            response = requests.get(url)
+            response.raise_for_status() 
+            t = response.json()
+            recommended_videos = [{
+                "id": t["videoId"],
+                "title": t["videoTitle"],
+                "authorId": t["channelId"],
+                "author": t["channelName"],
+                "viewCountText": f"{t['videoViews']} views"
+            }]
+            
+            stream_url = t["stream_url"]
+            description = t["videoDes"].replace("\n", "<br>")
+            title = t["videoTitle"]
+            authorId = t["channelId"]
+            author = t["channelName"]
+            author_icon = t["channelImage"]
+            
+            return recommended_videos, stream_url, description, title, authorId, author, author_icon
+      
   
 def get_search(q,page):
     global logs
