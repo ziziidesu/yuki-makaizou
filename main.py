@@ -33,10 +33,10 @@ videoapis = [
 ];
 
 apis = [
-    r"https://invidious.jing.rocks/",
-    r"https://invidious.nerdvpn.de/",
-    r"https://inv.nadeko.net/",
-    r"https://invidious.jing.rocks/",
+r"https://invidious.jing.rocks/",
+r"https://invidious.nerdvpn.de/",
+r"https://inv.nadeko.net/",
+r"https://invidious.jing.rocks/",
 r"https://inv.vern.cc/",
 r"https://inv.zzls.xyz/",
 r"https://invi.susurrando.com/",
@@ -444,6 +444,11 @@ def thumbnail(v: str):
 def home():
     global url
     url = requests.get('https://raw.githubusercontent.com/mochidukiyukimi/yuki-youtube-instance/main/instance.txt').text.rstrip()
+    
+
+@app.get("/app", response_class=HTMLResponse)
+def home(request: Request):
+    return template("app.html", {"request": request})
     
 @app.get("/snowball", response_class=HTMLResponse)
 def home(request: Request):

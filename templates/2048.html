@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2048</title>
+    <style>body {
+    background-color: #faf8ef;
+    display: flex;
+    justify-content: center;
+    font-family: "Clear Sans", Helvetica, serif;
+}
+
+h1 {
+    font-size: 80px;
+    line-height: 0.7;
+    color: #776E65;
+    margin: 0;
+}
+
+p, h2 {
+    margin: 0;
+}
+
+.container {
+    width: 468px;
+    margin-top: 30px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 456px;
+    height: 456px;
+    background-color: #BBADA0;
+    border: 7px solid #BBADA0;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.grid div {
+    width: 100px;
+    height: 100px;
+    margin: 7px;
+    border-radius: 3px;
+    background-color: #EEE4DA;
+    color: #AFA192;
+    font-weight: bold;
+    text-align: center;
+    font-size: 60px;
+    line-height: 1.6;
+}
+
+.score-container {
+    text-align: center;
+    width: 70px;
+    height: 60px;
+    border-radius: 3px;
+    background-color: #8f7a66;
+    color: #FFF;
+}
+
+#score {
+    font-size: 30px;
+}
+
+.score-title {
+    font-size: 16px;
+}</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="info">
+        <h1>2048</h1>
+        <div class="score-container">
+            <p class="score-title">score</p>
+            <h2 id="score">0</h2>
+        </div>
+    </div>
+    <p id="result">Join the numbers and get to the <b>2048</b> tile!</p>
+    <div class="grid"></div>
+</div>
+<script></script>
+</body>
+</html>
