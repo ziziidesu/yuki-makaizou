@@ -12,35 +12,87 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        /* wakameumaiボタンのスタイル */
+        #wakameumai-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background-color: #f5f5f5;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #wakameumai-toggle.on {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #wakameumai-toggle.off {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
 </head>
 
-    <body class="no-theme">
-        <div class="pure-g h-box" id="search-widget">
-            <div class="pure-u-1" id="logo">
-                <h1 href="/" class="pure-menu-heading">Invidious</h1>
-            </div>
-            <div class="pure-u-1-4"></div>
-            <div class="pure-u-1 pure-u-md-12-24 searchbar">
-                <form class="pure-form" action="/search" method="get">
-                    <fieldset>
-                        <input type="search" id="searchbox" autocomplete="on" autocorrect="on" autocapitalize="none" spellcheck="false" autofocus="" name="q" placeholder="検索" title="検索" value="">
-                    </fieldset>
-                </form>
-            </div>
-            <div class="pure-u-1-4"></div>
-            
+<body class="no-theme">
+    <div class="pure-g h-box" id="search-widget">
+        <div class="pure-u-1" id="logo">
+            <h1 href="/" class="pure-menu-heading">Invidious</h1>
         </div>
-        <script>$('#searchbox').autocomplete({
-            source: function (request, response) {
-                {
-            var url = "/suggest?keyword="+ request.term
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", url);
-            xhr.onload = function() {
-                response(JSON.parse(xhr.responseText));
+        <div class="pure-u-1-4"></div>
+        <div class="pure-u-1 pure-u-md-12-24 searchbar">
+            <form class="pure-form" action="/search" method="get">
+                <fieldset>
+                    <input type="search" id="searchbox" autocomplete="on" autocorrect="on" autocapitalize="none" spellcheck="false" autofocus="" name="q" placeholder="検索" title="検索" value="">
+                </fieldset>
+            </form>
+        </div>
+        <div class="pure-u-1-4"></div>
+    </div>
+
+    <div id="wakameumai-toggle" class="off">デフォルトでわかめtubeを利用する: 今はOFF</div>
+
+    <script>
+        const toggleButton = document.getElementById('wakameumai-toggle');
+
+        function initializeState() {
+            const wakameumai = document.cookie.split('; ').find(row => row.startsWith('wakameumai='));
+            if (wakameumai && wakameumai.split('=')[1] === 'true') {
+                toggleButton.classList.remove('off');
+                toggleButton.classList.add('on');
+                toggleButton.textContent = 'デフォルトでわかめtubeを利用する: 今はON';
+            } else {
+                toggleButton.classList.remove('on');
+                toggleButton.classList.add('off');
+                toggleButton.textContent = 'デフォルトでわかめtubeを利用する: 今はOFF';
             }
-            xhr.send();
-        }},delay:300});</script>
-    </body>
+        }
+
+        toggleButton.addEventListener('click', () => {
+            const isOn = toggleButton.classList.contains('on');
+            document.cookie = `wakameumai=${!isOn}; path=/;`;
+            initializeState();
+        });
+
+        initializeState();
+
+        $('#searchbox').autocomplete({
+            source: function (request, response) {
+                var url = "/suggest?keyword=" + request.term;
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.onload = function () {
+                    response(JSON.parse(xhr.responseText));
+                }
+                xhr.send();
+            },
+            delay: 300
+        });
+    </script>
+</body>
 
 </html>

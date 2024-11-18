@@ -264,9 +264,9 @@ def getting_data(videoid):
         f"https://ludicrous-wonderful-temple.glitch.me/api/login/{urllib.parse.quote(videoid)}",
         f"https://free-sudden-kiss.glitch.me/api/login/{urllib.parse.quote(videoid)}",
         f"https://wakame02m.glitch.me/api/login/{urllib.parse.quote(videoid)}",
-        f"https://natural-voltaic-titanium.glitch.me/api/login/{urllib.parse.quote(videoid)}"
+        f"https://natural-voltaic-titanium.glitch.me/api/login/{urllib.parse.quote(videoid)}",
+        f"https://jade-highfalutin-account.glitch.me/api/login/{urllib.parse.quote(videoid)}"
     ]
-    
     for url in urls:
         response = requests.get(url)
         if response.status_code == 200:
@@ -333,7 +333,7 @@ def check_cokie(cookie):
     return True
 
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI,Depends
 from fastapi import Response,Cookie,Request
 from fastapi.responses import HTMLResponse,PlainTextResponse
 from fastapi.responses import RedirectResponse as redirect
@@ -362,6 +362,10 @@ def home(request: Request):
 
 @app.get('/watch', response_class=HTMLResponse)
 def video(v: str, request: Request):
+    wakameumai = request.cookies.get("wakameumai")
+    if wakameumai == "true":
+        return redirect(url=f"/video?v={v}")
+
     videoid = v
     t = get_data(videoid)
     return template('watch.html', {
@@ -375,6 +379,7 @@ def video(v: str, request: Request):
         "authoricon": t[6],
         "author": t[5],
     })
+
     
 @app.get('/video', response_class=HTMLResponse)
 def video(v: str, request: Request):
