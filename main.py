@@ -469,6 +469,10 @@ def home(request: Request):
 def home(request: Request):
     return template("tool.html", {"request": request})
   
+@app.get("/craft", response_class=HTMLResponse)
+def home(request: Request):
+    return template("craft.html", {"request": request})
+  
 @app.get("/drive", response_class=HTMLResponse)
 def home(request: Request):
     return template("drive.html", {"request": request})
