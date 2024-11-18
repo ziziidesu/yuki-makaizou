@@ -267,7 +267,7 @@ def get_data(videoid):
     return [{"id":i["videoId"],"title":i["title"],"authorId":i["authorId"],"author":i["author"]} for i in t["recommendedVideos"]],list(reversed([i["url"] for i in t["formatStreams"]]))[:2],t["descriptionHtml"].replace("\n","<br>"),t["title"],t["authorId"],t["author"],t["authorThumbnails"][-1]["url"]
     
 def getting_data(videoid):
-        t = json.loads(apirequest(r"api/login/"+ urllib.parse.quote(videoid)))
+        t = json.loads(waapirequest(r"api/login/"+ urllib.parse.quote(videoid)))
         recommended_videos = [{
             "id": t["videoId"],
             "title": t["videoTitle"],
